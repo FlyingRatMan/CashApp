@@ -6,31 +6,67 @@ $json = file_get_contents("account.json");
 if (!$json) $_SESSION["kontostand"] = 0;
 
 // VALIDATION
-if (isset($_POST["submit"])) {
-    $amount =
+$amount = 0;
+$today = date("Y-m-d 00:00:00");
+$date = date("Y-m-d h:i:s");
+
+$err = "";
+function sanitize($input) :string {
+    $input = trim($input);
+    $input = stripslashes($input);
+    $input = htmlspecialchars($input);
+    $input = preg_replace('/[^0-9,.]/', '', $input);
+    return $input;
 }
 
-// DATA MANIPULATION
 if (isset($_POST["submit"])) {
-    $date = date("Y-m-d");
-    $time = date("h:i:s");
+    $sanitizedInput = sanitize($_POST["amount"]);
+    $onlyComas = str_replace(".", "", $sanitizedInput);
+    $standardizedAmount = str_replace(",", ".", $onlyComas);
+    $amount = floatval($standardizedAmount);
 
-    $transaction = [
-        "amount" => $_POST["amount"],
-        "date" => $date,
-        "time" => $time,
-    ];
-
+    $arr = explode(",", $onlyComas);
+    if ($arr[1] && strlen($arr[1]) > 2) {
+        $err = "Only two decimals are allowed";
+    }
+    if ((int)$amount > 500) {
+        $err = "Limit is excited";
+    }
     if ($json) {
         $data = json_decode($json, true);
-        $data[] = $transaction;
-        $file = json_encode($data, JSON_PRETTY_PRINT);
-    } else {
-        $file = json_encode([$transaction], JSON_PRETTY_PRINT);
+        $dailyLimit = 0;
+        foreach ($data as $entry) {
+            $diff = date_diff(date_create($entry["date"]), date_create($today));
+            if ($diff->d === 0) {
+                $dailyLimit += $entry["amount"];
+            }
+            if ($diff->h) {
+var_dump($diff->m);
+            }
+        }
+        if ($dailyLimit > 500) {
+            $err = "Limit is excited";
+        }
     }
-    $_SESSION["kontostand"] += $_POST["amount"];
-    file_put_contents("account.json", $file);
 
+
+
+    $transaction = [
+        "amount" => $amount,
+        "date" => $date,
+    ];
+
+    if (!$err) {
+        if ($json) {
+            $data = json_decode($json, true);
+            $data[] = $transaction;
+            $file = json_encode($data, JSON_PRETTY_PRINT);
+        } else {
+            $file = json_encode([$transaction], JSON_PRETTY_PRINT);
+        }
+        $_SESSION["kontostand"] += $amount;
+        file_put_contents("account.json", $file);
+    }
 }
 ?>
 
@@ -46,9 +82,10 @@ if (isset($_POST["submit"])) {
 
 <h2>Geld hochladen</h2>
 <form action="topup" method="POST">
-    Betrag: <input type="number" step="any" name="amount"><br>
+    Betrag: <input required type="text" step="any" name="amount" > <br>
 
     <input type="submit" name="submit" value="Hochladen">
+    <p><?php echo $err ?></p>
 </form>
 
 </body>
