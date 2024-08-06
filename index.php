@@ -3,7 +3,9 @@ session_start();
 
 $successful = false;
 $json = file_get_contents("account.json");
-if (!$json) $_SESSION["kontostand"] = 0;
+if (!$json)  {
+    $_SESSION["kontostand"] = 0;
+}
 
 // VALIDATION
 $amount = 0;
@@ -23,34 +25,38 @@ if (isset($_POST["submit"])) {
     $sanitizedInput = sanitize($_POST["amount"]);
     $onlyComas = str_replace(".", "", $sanitizedInput);
     $standardizedAmount = str_replace(",", ".", $onlyComas);
-    $amount = floatval($standardizedAmount);
+    $amount = (float)$standardizedAmount;
 
     $arr = explode(",", $onlyComas);
     if ($arr[1] && strlen($arr[1]) > 2) {
         $err = "Only two decimals are allowed";
     }
-    if ((int)$amount > 500) {
-        $err = "Limit is excited";
-    }
+
     if ($json) {
         $data = json_decode($json, true);
         $dailyLimit = 0;
+        $hourlyLimit = 0;
         foreach ($data as $entry) {
-            $diff = date_diff(date_create($entry["date"]), date_create($today));
+            $diff = date_diff(date_create($today), date_create($entry["date"]));
+            $hourDiff = date_create($entry["date"])->diff(date_create());
             if ($diff->d === 0) {
                 $dailyLimit += $entry["amount"];
             }
-            if ($diff->h) {
-var_dump($diff->m);
+            if ($hourDiff->format("%H") === "00") {
+                $hourlyLimit += $entry["amount"];
             }
         }
-        if ($dailyLimit > 500) {
-            $err = "Limit is excited";
+        $hourlyLimit += $amount;
+        $dailyLimit += $amount;
+
+        if ($dailyLimit > 500 || (int)$amount > 500) {
+            $err = "Limit is exceeded";
+        }
+        if ( $hourlyLimit > 100) {
+            $err = "Limit is exceeded";
         }
     }
-
-
-
+    // inputs must stay filled when the error occurs
     $transaction = [
         "amount" => $amount,
         "date" => $date,
@@ -77,12 +83,16 @@ var_dump($diff->m);
 </head>
 <body>
 
-<p> <?php if (isset($_POST["submit"]) && $_SESSION["kontostand"]) echo "Die Transaktion wurde erfolgreich gespeichert!" ?> </p>
+<p> <?php if (isset($_POST["submit"]) && $_SESSION["kontostand"]) {
+        echo "Die Transaktion wurde erfolgreich gespeichert!"; } ?> </p>
 <h3>Kontostand: <?php echo $_SESSION["kontostand"] ?></h3>
 
 <h2>Geld hochladen</h2>
-<form action="topup" method="POST">
-    Betrag: <input required type="text" step="any" name="amount" > <br>
+<form method="POST">
+    Betrag: <input required
+                   type="text"
+                   name="amount"
+                   value="<?php if ($err !== "") { echo $amount; } ?>"> <br>
 
     <input type="submit" name="submit" value="Hochladen">
     <p><?php echo $err ?></p>
@@ -90,4 +100,6 @@ var_dump($diff->m);
 
 </body>
 </html>
+
+
 
