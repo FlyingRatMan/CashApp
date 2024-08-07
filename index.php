@@ -6,9 +6,8 @@ $json = file_get_contents("account.json");
 if (!$json)  {
     $_SESSION["kontostand"] = 0;
 }
+$loggedUser = $_SESSION['loggedUser'];
 
-// VALIDATION
-$amount = 0;
 $today = date("Y-m-d 00:00:00");
 $date = date("Y-m-d h:i:s");
 
@@ -33,7 +32,11 @@ if (isset($_POST["submit"])) {
     }
 
     if ($json) {
-        $data = json_decode($json, true);
+        try {
+            $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            echo "JSON error:" . $e->getMessage();
+        }
         $dailyLimit = 0;
         $hourlyLimit = 0;
         foreach ($data as $entry) {
@@ -56,23 +59,34 @@ if (isset($_POST["submit"])) {
             $err = "Limit is exceeded";
         }
     }
-    // inputs must stay filled when the error occurs
-    $transaction = [
-        "amount" => $amount,
-        "date" => $date,
-    ];
 
     if (!$err) {
-        if ($json) {
-            $data = json_decode($json, true);
-            $data[] = $transaction;
-            $file = json_encode($data, JSON_PRETTY_PRINT);
-        } else {
-            $file = json_encode([$transaction], JSON_PRETTY_PRINT);
+        $transaction = [
+            "amount" => $amount,
+            "date" => $date,
+        ];
+
+        try {
+            $transactions = [];
+
+            if ($json) {
+                $transactions = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            }
+
+            $transactions[] = $transaction;
+            $data = json_encode($transactions, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+            file_put_contents("account.json", $data);
+
+            $_SESSION["kontostand"] += $amount;
+
+        } catch (JsonException $e) {
+            echo "JSON error:" . $e->getMessage();
         }
-        $_SESSION["kontostand"] += $amount;
-        file_put_contents("account.json", $file);
     }
+}
+
+if (isset($_POST["logout"])) {
+    unset($_SESSION["loggedUser"]);
 }
 ?>
 
@@ -83,19 +97,35 @@ if (isset($_POST["submit"])) {
 </head>
 <body>
 
-<p> <?php if (isset($_POST["submit"]) && $_SESSION["kontostand"]) {
-        echo "Die Transaktion wurde erfolgreich gespeichert!"; } ?> </p>
-<h3>Kontostand: <?php echo $_SESSION["kontostand"] ?></h3>
-
-<h2>Geld hochladen</h2>
+<h2><?php echo $loggedUser ?></h2>
 <form method="POST">
-    Betrag: <input required
-                   type="text"
-                   name="amount"
-                   value="<?php if ($err !== "") { echo $amount; } ?>"> <br>
+<?php
+if ($loggedUser) {
+    echo '<input type="submit" name="logout" value="Log out">';
+}
+if (!$loggedUser) {
+    echo '<input type="submit" name="login" value="Log in">';
+}
+?>
+</form>
+
+<h3>Kontostand: <?php echo $_SESSION["kontostand"] ?></h3>
+<h2>Geld hochladen</h2>
+
+<form method="POST">
+
+    <label for="amount"> Betrag:
+        <input required
+               type="text"
+               name="amount"
+               value="<?php if ($err !== "") { echo $amount; } ?>">
+    </label> <br>
 
     <input type="submit" name="submit" value="Hochladen">
     <p><?php echo $err ?></p>
+    <p><?php if (isset($_POST["submit"]) && $_SESSION["kontostand"]) {
+            echo "Die Transaktion wurde erfolgreich gespeichert!"; } ?></p>
+
 </form>
 
 </body>

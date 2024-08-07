@@ -11,6 +11,10 @@ function isValidPass ($password) :string{
 }
 
 function isValidEmail ($email) :string {
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return "Invalid email address.";
+    }
+
     try {
         $json = file_get_contents("users.json");
         if (!$json) {
@@ -26,10 +30,6 @@ function isValidEmail ($email) :string {
         }
     }
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return "Invalid email address.";
-    }
-
     return "";
 }
 
@@ -43,11 +43,7 @@ if (isset($_POST["user"])) {
         'password'=>isValidPass($userPassword),
     ];
 
-    //$err = validate($userPassword, $userEmail);
-    //$newEmail = isNewEmail($userEmail);
-
-    if ($errors['email'] === '' && $errors['password'] === '') {           //($err === 'No errors' && $newEmail === 'New Email')
-        var_dump('no errors');
+    if ($errors['email'] === '' && $errors['password'] === '') {
         $user = [
             "name" => $userName,
             "email" => $userEmail,
@@ -55,15 +51,16 @@ if (isset($_POST["user"])) {
         ];
 
         try {
+            $users = [];
+
             $json = file_get_contents("users.json");
             if ($json) {
-                $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-                $data[] = $user;
-                $file = json_encode($data, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
-            } else {
-                $file = json_encode([$user], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+                $users = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
             }
-            file_put_contents("users.json", $file);
+
+            $users[] = $user;
+            $data = json_encode($users, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+            file_put_contents("users.json", $data);
 
         } catch (JsonException $e) {
             echo "JSON error:" . $e->getMessage();
@@ -104,7 +101,7 @@ if (isset($_POST["user"])) {
     </label>
     <p><?php if ($errors) {
             foreach ($errors as $error) {
-                echo $error . "<br>";
+                echo $error;
             }
         } ?></p>
 
