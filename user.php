@@ -1,32 +1,73 @@
 <?php declare(strict_types=1);
-session_start();
 
-$json = file_get_contents("users.json");
+function isValidPass ($password) :string{
+    $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/';
 
-$userName = "";
-$userEmail = "";
-$userPassword = "";
-function sanitize($input) :string {
-    $input = trim($input);
-    $input = stripslashes($input);
-    $input = htmlspecialchars($input);
-    return $input;
+    if (!preg_match($pattern, $password)) {
+        return "Password should be at least 6 characters long, and have special characters, numbers, capital and lower case letters.";
+    }
+
+    return '';
 }
 
-if (isset($_POST['submit'])) {
-    $user = [
-            "name" => $_POST['name'],
-            "email" => $_POST['email'],
-            "password" => password_hash($_POST['password'], PASSWORD_BCRYPT),
+function isValidEmail ($email) :string {
+    try {
+        $json = file_get_contents("users.json");
+        if (!$json) {
+            return "";
+        }
+        $users = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+    } catch (JsonException $e) {
+        echo "JSON error: " . $e->getMessage();
+    }
+    foreach ($users as $user) {
+        if ($email === $user['email']) {
+            return "This email address is already in use.";
+        }
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return "Invalid email address.";
+    }
+
+    return "";
+}
+
+if (isset($_POST["user"])) {
+    $userName = $_POST["name"];
+    $userEmail = $_POST['email'];
+    $userPassword = $_POST['password'];
+
+    $errors = [
+        'email'=>isValidEmail($userEmail),
+        'password'=>isValidPass($userPassword),
     ];
 
-    if ($json) {
-        // validation before saving
-        $data = json_decode($json, true);
-        $data[] = $user;
-        $file = json_encode($data, JSON_PRETTY_PRINT);
-    } else {
-        $file = json_encode([$user], JSON_PRETTY_PRINT);
+    //$err = validate($userPassword, $userEmail);
+    //$newEmail = isNewEmail($userEmail);
+
+    if ($errors['email'] === '' && $errors['password'] === '') {           //($err === 'No errors' && $newEmail === 'New Email')
+        var_dump('no errors');
+        $user = [
+            "name" => $userName,
+            "email" => $userEmail,
+            "password" => password_hash($_POST['password'], PASSWORD_DEFAULT),
+        ];
+
+        try {
+            $json = file_get_contents("users.json");
+            if ($json) {
+                $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+                $data[] = $user;
+                $file = json_encode($data, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+            } else {
+                $file = json_encode([$user], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+            }
+            file_put_contents("users.json", $file);
+
+        } catch (JsonException $e) {
+            echo "JSON error:" . $e->getMessage();
+        }
     }
 }
 
@@ -44,11 +85,30 @@ if (isset($_POST['submit'])) {
 <body>
 
 <form method="POST">
-    <input required type="text" name="name">
-    <input required type="text" name="email">
-    <input required type="text" name="password">
+    <label for="name"> Name:
+        <input required
+               type="text"
+               name="name"
+               value="<?php if ($errors) { echo $userName; } ?>">
+    </label>
+    <label for="email"> E-Mail:
+        <input required
+               type="email"
+               name="email"
+               value="<?php if ($errors) { echo $userEmail; } ?>">
+    </label>
+    <label for="password"> Password:
+        <input required
+               type="password"
+               name="password">
+    </label>
+    <p><?php if ($errors) {
+            foreach ($errors as $error) {
+                echo $error . "<br>";
+            }
+        } ?></p>
 
-    <input type="submit">
+    <input type="submit" name="user" value="Sign in!">
 </form>
 
 </body>
