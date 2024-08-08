@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <form method="POST">
+        <label for="name"> Name:
+            <input required
+                   type="text"
+                   name="name"
+                   value="{{ errors.email or errors.password ? userName : '' }}">
+        </label>
+        <label for="email"> E-Mail:
+            <input required
+                   type="email"
+                   name="email"
+                   value="{{ errors.email or errors.password ? userEmail : '' }}">
+        </label>
+        <label for="password"> Password:
+            <input required
+                   type="password"
+                   name="password">
+        </label>
+        <p>
+            {% if errors %}
+                {% for error in errors %}
+                    {{ error }}
+                {% endfor %}
+            {% endif %}
+        </p>
+
+        <input type="submit" name="user" value="Sign in!">
+    </form>
+
+</body>
+</html>

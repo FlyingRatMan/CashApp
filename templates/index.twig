@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cash App</title>
+</head>
+<body>
+
+    <h2>{{ loggedUser }}</h2>
+    <form method="POST">
+        {% if loggedUser %}
+            <input type="submit" name="logout" value="Log out">
+        {% else %}
+            <input type="submit" name="login" value="Log in">
+        {% endif %}
+    </form>
+
+    <h3>Kontostand: {{ kontostand }}</h3>
+    <h2>Geld hochladen</h2>
+
+    <form method="POST">
+
+        <label for="amount"> Betrag:
+            <input required
+                   type="text"
+                   name="amount"
+                   value="{{ amount }}">
+        </label> <br>
+
+        <input type="submit" name="submit" value="Hochladen">
+        <p>{{ err }}</p>
+        <p>{% if submit and kontostand %}
+                Die Transaktion wurde erfolgreich gespeichert!
+            {% endif %}
+        </p>
+
+    </form>
+
+</body>
+</html>

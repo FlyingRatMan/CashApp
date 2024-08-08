@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+
+<form method="POST">
+    <label for="email"> E-Mail:
+        <input required
+               type="email"
+               name="email">
+    </label>
+    <label for="password"> Password:
+        <input required
+               type="password"
+               name="password">
+    </label>
+
+    <input type="submit" name="login" value="Log in!">
+    <p>{% if submit %}
+            You are logged in!
+        {% endif %}
+    </p>
+</form>
+
+
+</body>
+</html>

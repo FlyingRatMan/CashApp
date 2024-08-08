@@ -1,5 +1,9 @@
 <?php declare(strict_types=1);
+require_once __DIR__ . '/vendor/autoload.php';
 session_start();
+
+$loader = new \Twig\Loader\FilesystemLoader('templates');
+$twig = new \Twig\Environment($loader);
 
 $successful = false;
 $json = file_get_contents("account.json");
@@ -7,6 +11,7 @@ if (!$json)  {
     $_SESSION["kontostand"] = 0;
 }
 $loggedUser = $_SESSION['loggedUser'];
+$kontostand = $_SESSION['kontostand'] ?? '0';
 
 $today = date("Y-m-d 00:00:00");
 $date = date("Y-m-d h:i:s");
@@ -88,48 +93,11 @@ if (isset($_POST["submit"])) {
 if (isset($_POST["logout"])) {
     unset($_SESSION["loggedUser"]);
 }
-?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>CashApp</title>
-</head>
-<body>
-
-<h2><?php echo $loggedUser ?></h2>
-<form method="POST">
-<?php
-if ($loggedUser) {
-    echo '<input type="submit" name="logout" value="Log out">';
-}
-if (!$loggedUser) {
-    echo '<input type="submit" name="login" value="Log in">';
-}
-?>
-</form>
-
-<h3>Kontostand: <?php echo $_SESSION["kontostand"] ?></h3>
-<h2>Geld hochladen</h2>
-
-<form method="POST">
-
-    <label for="amount"> Betrag:
-        <input required
-               type="text"
-               name="amount"
-               value="<?php if ($err !== "") { echo $amount; } ?>">
-    </label> <br>
-
-    <input type="submit" name="submit" value="Hochladen">
-    <p><?php echo $err ?></p>
-    <p><?php if (isset($_POST["submit"]) && $_SESSION["kontostand"]) {
-            echo "Die Transaktion wurde erfolgreich gespeichert!"; } ?></p>
-
-</form>
-
-</body>
-</html>
-
-
-
+echo $twig->render('index.twig', [
+    'loggedUser' => $loggedUser,
+    'kontostand' => $kontostand,
+    'amount' => $err !== "" ? $amount : "",
+    'err' => $err,
+    'submit' => isset($_POST["submit"])
+]);

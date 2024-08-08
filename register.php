@@ -1,4 +1,8 @@
 <?php declare(strict_types=1);
+require_once __DIR__ . '/vendor/autoload.php';
+
+$loader = new \Twig\Loader\FilesystemLoader('templates');
+$twig = new \Twig\Environment($loader);
 
 function isValidPass ($password) :string{
     $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/';
@@ -68,45 +72,8 @@ if (isset($_POST["user"])) {
     }
 }
 
-?>
-
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sign in</title>
-</head>
-<body>
-
-<form method="POST">
-    <label for="name"> Name:
-        <input required
-               type="text"
-               name="name"
-               value="<?php if ($errors) { echo $userName; } ?>">
-    </label>
-    <label for="email"> E-Mail:
-        <input required
-               type="email"
-               name="email"
-               value="<?php if ($errors) { echo $userEmail; } ?>">
-    </label>
-    <label for="password"> Password:
-        <input required
-               type="password"
-               name="password">
-    </label>
-    <p><?php if ($errors) {
-            foreach ($errors as $error) {
-                echo $error;
-            }
-        } ?></p>
-
-    <input type="submit" name="user" value="Sign in!">
-</form>
-
-</body>
-</html>
+echo $twig->render('register.twig', [
+    'userName' => $userName,
+    'userEmail' => $userEmail,
+    'errors' => $errors,
+]);
