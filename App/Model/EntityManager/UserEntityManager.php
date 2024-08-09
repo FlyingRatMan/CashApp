@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace src\Model\EntityManager;
 
-use Error;
 use src\Model\Repository\UserRepository;
 
 class UserEntityManager
@@ -16,7 +15,7 @@ class UserEntityManager
     public function save(string $name, string $email, string $password)
     {
         if ($this->userRepository->getUserByEmail($email)) {
-            throw new Error("User already exists");
+            // update user
         }
 
         $user = [

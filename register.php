@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 require_once __DIR__ . '/vendor/autoload.php';
 
+use src\Model\EntityManager\UserEntityManager;
+
 $loader = new \Twig\Loader\FilesystemLoader('templates');
 $twig = new \Twig\Environment($loader);
 
@@ -46,6 +48,7 @@ if (isset($_POST["user"])) {
         'email'=>isValidEmail($userEmail),
         'password'=>isValidPass($userPassword),
     ];
+
 
     if ($errors['email'] === '' && $errors['password'] === '') {
         $user = [

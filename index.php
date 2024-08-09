@@ -92,7 +92,7 @@ if (isset($_POST["submit"])) {
 }
 
 if (isset($_POST["logout"])) {
-    unset($_SESSION["loggedUser"]);
+    session_destroy();
     header("Location: login.php");
     exit();
 }
