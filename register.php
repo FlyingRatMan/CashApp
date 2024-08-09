@@ -66,6 +66,9 @@ if (isset($_POST["user"])) {
             $data = json_encode($users, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
             file_put_contents("users.json", $data);
 
+            header("Location: login.php");
+            exit();
+
         } catch (JsonException $e) {
             echo "JSON error:" . $e->getMessage();
         }

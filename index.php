@@ -1,6 +1,7 @@
-<?php declare(strict_types=1);
-require_once __DIR__ . '/vendor/autoload.php';
+<?php
+declare(strict_types=1);
 session_start();
+require_once __DIR__ . '/vendor/autoload.php';
 
 $loader = new \Twig\Loader\FilesystemLoader('templates');
 $twig = new \Twig\Environment($loader);
@@ -17,7 +18,7 @@ $today = date("Y-m-d 00:00:00");
 $date = date("Y-m-d h:i:s");
 
 $err = "";
-function sanitize($input) :string {
+function sanitize(string $input) :string {
     $input = trim($input);
     $input = stripslashes($input);
     $input = htmlspecialchars($input);
@@ -92,6 +93,13 @@ if (isset($_POST["submit"])) {
 
 if (isset($_POST["logout"])) {
     unset($_SESSION["loggedUser"]);
+    header("Location: login.php");
+    exit();
+}
+
+if (isset($_POST["login"])) {
+    header("Location: login.php");
+    exit();
 }
 
 echo $twig->render('index.twig', [
