@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace src\Model\EntityManager;
+namespace App\Model\EntityManager;
 
 class JsonManager
 {
     public function __construct(
-        private string $pathToJson
+        private readonly string $pathToJson
     ) {}
 
     /**
      * @throws \JsonException
      */
-    public function readJson(): array
+    public function read(): array
     {
         if (!file_exists($this->pathToJson)) {
             return [];
@@ -25,7 +25,7 @@ class JsonManager
     /**
      * @throws \JsonException
      */
-    public function writeJson(array $data): void
+    public function write(array $data): void
     {
         file_put_contents($this->pathToJson, json_encode($data, JSON_THROW_ON_ERROR|JSON_PRETTY_PRINT));
     }

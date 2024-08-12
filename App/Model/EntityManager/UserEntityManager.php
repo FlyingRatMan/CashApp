@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace src\Model\EntityManager;
+namespace App\Model\EntityManager;
 
-use src\Model\Repository\UserRepository;
+use App\Model\Repository\UserRepository;
+
+require __DIR__ . '/../../../vendor/autoload.php';
 
 class UserEntityManager
 {
@@ -14,16 +16,16 @@ class UserEntityManager
 
     public function save(string $name, string $email, string $password)
     {
-        if ($this->userRepository->getUserByEmail($email)) {
-            // update user
-        }
-
         $user = [
             "name" => $name,
             "email" => $email,
             "password" => password_hash($password, PASSWORD_DEFAULT),
         ];
 
-        $this->jsonManager->writeJson($user);
+        if ($existingUser = $this->userRepository->getUserByEmail($email)) {
+            throw new \Error('User already exist.');
+        }
+
+        $this->jsonManager->write($user);
     }
 }

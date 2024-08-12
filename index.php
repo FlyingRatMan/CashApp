@@ -1,9 +1,30 @@
 <?php
 declare(strict_types=1);
-session_start();
+//session_start();
+use App\Controller\HomeController;
+use App\Controller\LoginController;
+use App\Controller\LogoutController;
+use App\Controller\RegistrationController;
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 $loader = new \Twig\Loader\FilesystemLoader('templates');
+$twig = new \Twig\Environment($loader);
+
+$controller = $_GET['controller'] ?? 'home';
+$action = $_GET['action'] ?? 'index';
+
+$controllerInit = match ($controller) {
+    'login' => new LoginController($twig),
+    'register' => new RegistrationController(),
+    'logout' => new LogoutController(),
+    default => new HomeController(),
+};
+
+$controllerInit->index($action);
+
+//  !!!old code
+/*$loader = new \Twig\Loader\FilesystemLoader('templates');
 $twig = new \Twig\Environment($loader);
 
 $successful = false;
@@ -108,4 +129,4 @@ echo $twig->render('index.twig', [
     'amount' => $err !== "" ? $amount : "",
     'err' => $err,
     'submit' => isset($_POST["submit"])
-]);
+]);*/

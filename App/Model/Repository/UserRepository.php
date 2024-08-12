@@ -1,20 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace src\Model\Repository;
+namespace App\Model\Repository;
 
+use App\Model\EntityManager\JsonManager;
 use Error;
-use src\Model\EntityManager\JsonManager;
+
+require __DIR__ . '/../../../vendor/autoload.php';
 
 class UserRepository
 {
     public function __construct(
-        private JsonManager $dbManager
+        private JsonManager $jsonManager
     ) {}
 
     public function getUserByEmail(string $email): array
     {
-        $users = $this->dbManager->readJson();
+        $users = $this->jsonManager->read();
 
         foreach ($users as $user) {
             if ($user['email'] === $email) {
@@ -23,5 +25,10 @@ class UserRepository
         }
 
         throw new Error('User does not exist');
+    }
+
+    public function print(): void
+    {
+        echo "USER REPO YAY";
     }
 }
