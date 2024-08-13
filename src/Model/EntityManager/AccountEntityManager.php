@@ -11,8 +11,11 @@ class AccountEntityManager
         private JsonManager $jsonManager
     ) {}
 
+    /**
+     * @throws \JsonException
+     */
     public function add(array $data): void
     {
-        $this->jsonManager->write($data);
+        $this->jsonManager->write([$data]);
     }
 }

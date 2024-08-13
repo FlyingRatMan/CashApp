@@ -9,8 +9,9 @@ require __DIR__ . '/../../../vendor/autoload.php';
 
 class UserEntityManager
 {
+    // check in controller whether user already exist
+
     public function __construct(
-        private UserRepository $userRepository,
         private JsonManager $jsonManager
     ) {}
 
@@ -22,10 +23,12 @@ class UserEntityManager
             "password" => password_hash($password, PASSWORD_DEFAULT),
         ];
 
-        if ($existingUser = $this->userRepository->getUserByEmail($email)) {
-            throw new \Error('User already exist.');
-        }
-
         $this->jsonManager->write($user);
     }
+
+    /*public function update(string $name, array &$user): void
+    {
+        $this->jsonManager->update($name);
+        $user['name'] = $name;
+    }*/
 }

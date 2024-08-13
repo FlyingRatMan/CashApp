@@ -5,23 +5,38 @@ use App\Controller\HomeController;
 use App\Controller\LoginController;
 use App\Controller\LogoutController;
 use App\Controller\RegistrationController;
+use App\Model\EntityManager\AccountEntityManager;
+use App\Model\EntityManager\JsonManager;
+use App\Model\Repository\AccountRepository;
+use App\Service\AccountValidator;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
 $loader = new \Twig\Loader\FilesystemLoader('templates');
 $twig = new \Twig\Environment($loader);
 
-$controller = $_GET['controller'] ?? 'home';
-$action = $_GET['action'] ?? 'index';
+$userJson = new JsonManager(__DIR__ . '/users.json');
+$accountJson = new JsonManager(__DIR__ . '/account.json');
+
+$accRepository = new AccountRepository($accountJson);
+$accEntity = new AccountEntityManager($accountJson);
+$accValidator = new AccountValidator();
+
+$controller = $_GET['page'] ?? 'home';
+$method = $_SERVER['REQUEST_METHOD'];
 
 $controllerInit = match ($controller) {
     'login' => new LoginController($twig),
-    'register' => new RegistrationController(),
-    'logout' => new LogoutController(),
-    default => new HomeController(),
+    'register' => new RegistrationController($twig),
+    'logout' => new LogoutController($twig),
+    'home' => new HomeController($twig, $accEntity, $accRepository, $accValidator),
 };
 
-$controllerInit->index($action);
+$controllerInit->index();
+
+if ($method === 'POST' && $controller === 'home') {
+    $controllerInit->transfer();
+}
 
 //  !!!old code
 /*$loader = new \Twig\Loader\FilesystemLoader('templates');

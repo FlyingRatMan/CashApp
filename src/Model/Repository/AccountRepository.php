@@ -17,4 +17,16 @@ class AccountRepository
     {
         return $this->jsonManager->read();
     }
+
+    public function getBalance(): int
+    {
+        $balance = 0;
+        $data = $this->jsonManager->read();
+
+        foreach ($data as $transaction) {
+            $balance += $transaction['amount'];
+        }
+
+        return (int)$balance;
+    }
 }

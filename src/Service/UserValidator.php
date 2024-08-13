@@ -9,7 +9,7 @@ require __DIR__ . '/../../vendor/autoload.php';
 
 class UserValidator
 {
-    public function isValidEmail($email): bool
+    public function isValidEmail(string $email): bool
     {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new Error('Invalid email address.');
@@ -18,7 +18,7 @@ class UserValidator
         return true;
     }
 
-    public function isValidPassword($password): bool
+    public function isValidPassword(string $password): bool
     {
         $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/';
 
@@ -30,12 +30,23 @@ class UserValidator
         return true;
     }
 
-    public function validateUser(string $email, string $password): bool
+    public function isValidCredentials(string $email,
+                                       string $password,
+                                       array $user): bool
+    {
+        if ($user['email'] === $email) {
+            return password_verify($password, $user['password']);
+        }
+
+        return false;
+    }
+
+    /*public function validateUser(string $email, string $password): bool
     {
         if ($this->isValidEmail($email) && $this->isValidPassword($password)) {
             return true;
         }
 
         throw new Error('Invalid user credentials.');
-    }
+    }*/
 }

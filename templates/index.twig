@@ -9,9 +9,9 @@
     <h2>{{ loggedUser }}</h2>
     <form method="POST">
         {% if loggedUser %}
-            <input type="submit" name="logout" value="Log out">
+            <button type="button" onclick="window.location.href='index.php?page=logout'">Log out</button>
         {% else %}
-            <input type="submit" name="login" value="Log in">
+            <button type="button" onclick="window.location.href='index.php?page=login'">Log in</button>
         {% endif %}
     </form>
 

@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace App\Model\EntityManager;
 
+use App\Service\UserValidator;
+
+require __DIR__ . '/../../../vendor/autoload.php';
+
 class JsonManager
 {
     public function __construct(
@@ -19,7 +23,8 @@ class JsonManager
         }
 
         $json = file_get_contents($this->pathToJson);
-        return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        $json && $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        return $data ?? [];
     }
 
     /**
@@ -27,6 +32,8 @@ class JsonManager
      */
     public function write(array $data): void
     {
+        // add maybe something that will not rewrite the whole content if the file already exist
+
         file_put_contents($this->pathToJson, json_encode($data, JSON_THROW_ON_ERROR|JSON_PRETTY_PRINT));
     }
 }
