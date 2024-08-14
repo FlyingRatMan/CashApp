@@ -11,13 +11,13 @@
             <input required
                    type="text"
                    name="name"
-                   value="{{ errors.email or errors.password ? userName : '' }}">
+                   value="{{ errors ? userName : '' }}">
         </label>
         <label for="email"> E-Mail:
             <input required
                    type="email"
                    name="email"
-                   value="{{ errors.email or errors.password ? userEmail : '' }}">
+                   value="{{ errors ? userEmail : '' }}">
         </label>
         <label for="password"> Password:
             <input required
@@ -25,14 +25,10 @@
                    name="password">
         </label>
         <p>
-            {% if errors %}
-                {% for error in errors %}
-                    {{ error }}
-                {% endfor %}
-            {% endif %}
+            {{ errors.emailErr ~ errors.passErr }}
         </p>
 
-        <input type="submit" name="user" value="Sign in!">
+        <input type="submit" name="user" value="Sign up!">
     </form>
 
 </body>

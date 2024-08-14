@@ -24,11 +24,6 @@ class UserRepository
             }
         }
 
-        throw new Error('User does not exist');
-    }
-
-    public function print(): void
-    {
-        echo "USER REPO YAY";
+        return [];
     }
 }

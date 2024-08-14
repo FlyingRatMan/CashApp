@@ -1,41 +1,51 @@
 <?php
 declare(strict_types=1);
-//session_start();
+session_start();
+
 use App\Controller\HomeController;
 use App\Controller\LoginController;
 use App\Controller\LogoutController;
 use App\Controller\RegistrationController;
 use App\Model\EntityManager\AccountEntityManager;
 use App\Model\EntityManager\JsonManager;
+use App\Model\EntityManager\UserEntityManager;
 use App\Model\Repository\AccountRepository;
+use App\Model\Repository\UserRepository;
 use App\Service\AccountValidator;
+use App\Service\UserValidator;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
 $loader = new \Twig\Loader\FilesystemLoader('templates');
 $twig = new \Twig\Environment($loader);
 
-$userJson = new JsonManager(__DIR__ . '/users.json');
-$accountJson = new JsonManager(__DIR__ . '/account.json');
+$userJson = new JsonManager('users.json');
+$accountJson = new JsonManager('account.json');
 
-$accRepository = new AccountRepository($accountJson);
+$accRepo = new AccountRepository($accountJson);
 $accEntity = new AccountEntityManager($accountJson);
-$accValidator = new AccountValidator();
+$accValid = new AccountValidator();
+$userRepo = new UserRepository($userJson);
+$userEntity = new UserEntityManager($userJson);
+$userValid = new UserValidator();
 
 $controller = $_GET['page'] ?? 'home';
 $method = $_SERVER['REQUEST_METHOD'];
 
 $controllerInit = match ($controller) {
     'login' => new LoginController($twig),
-    'register' => new RegistrationController($twig),
+    'register' => new RegistrationController($twig, $userEntity, $userRepo, $userValid),
     'logout' => new LogoutController($twig),
-    'home' => new HomeController($twig, $accEntity, $accRepository, $accValidator),
+    'home' => new HomeController($twig, $accEntity, $accRepo, $accValid),
 };
 
 $controllerInit->index();
 
 if ($method === 'POST' && $controller === 'home') {
     $controllerInit->transfer();
+}
+if ($method === 'POST' && $controller === 'register') {
+    $controllerInit->register();
 }
 
 //  !!!old code

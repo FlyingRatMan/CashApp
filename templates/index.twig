@@ -12,6 +12,7 @@
             <button type="button" onclick="window.location.href='index.php?page=logout'">Log out</button>
         {% else %}
             <button type="button" onclick="window.location.href='index.php?page=login'">Log in</button>
+            <button type="button" onclick="window.location.href='index.php?page=register'">Sign up</button>
         {% endif %}
     </form>
 
@@ -28,8 +29,8 @@
         </label> <br>
 
         <input type="submit" name="submit" value="Hochladen">
-        <p>{{ err }}</p>
-        <p>{% if submit and kontostand %}
+        <p>{{ errors.limit ~ errors.validAmount}}</p>
+        <p>{% if errors.limit == '' and errors.validAmount == '' and submit %}
                 Die Transaktion wurde erfolgreich gespeichert!
             {% endif %}
         </p>

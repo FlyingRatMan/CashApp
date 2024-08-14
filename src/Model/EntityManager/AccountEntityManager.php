@@ -16,6 +16,6 @@ class AccountEntityManager
      */
     public function add(array $data): void
     {
-        $this->jsonManager->write([$data]);
+        $this->jsonManager->write($data);
     }
 }

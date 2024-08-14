@@ -42,19 +42,11 @@ class AccountValidator
         $amount = $this->transform($amount);
         $arr = explode(".", $amount);
 
-        if ($arr[1] && strlen($arr[1]) > 2) {
+        if ((count($arr) > 1) && (strlen($arr[1]) > 2)) {
             return "Only two decimals are allowed";
         }
 
         return '';
-    }
-
-    public function getErrors(array $data, float $amount): array
-    {
-        return [
-            'limit' => $this->limit($data, (int)$amount),
-            'validAmount' => $this->isValidAmount((string)$amount),
-        ];
     }
 
     public function sanitize(string $input): string

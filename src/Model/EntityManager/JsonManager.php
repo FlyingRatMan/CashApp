@@ -27,13 +27,25 @@ class JsonManager
         return $data ?? [];
     }
 
-    /**
-     * @throws \JsonException
-     */
-    public function write(array $data): void
+    public function write(array $d): void
     {
-        // add maybe something that will not rewrite the whole content if the file already exist
+        try {
+            $data = [];
 
-        file_put_contents($this->pathToJson, json_encode($data, JSON_THROW_ON_ERROR|JSON_PRETTY_PRINT));
+            if (file_exists($this->pathToJson)) {
+                $json = file_get_contents($this->pathToJson);
+
+                if ($json) {
+                    $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+                }
+            }
+
+            $data[] = $d;
+
+            $data = json_encode($data, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+            file_put_contents($this->pathToJson, $data);
+        } catch (\JsonException $e) {
+            echo "JSON error:" . $e->getMessage();
+        }
     }
 }
