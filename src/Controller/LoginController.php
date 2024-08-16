@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Model\Repository\UserRepository;
+use App\Service\UserValidator;
 
 require __DIR__ . '/../../vendor/autoload.php';
 
@@ -11,20 +12,31 @@ class LoginController
 {
     public function __construct(
         private $twig,
+        private UserRepository $userRepository,
+        private UserValidator $userValidator,
     ) {}
 
-    // index to show the login form
-    // login to call a login method on a model and redirect to home page
-
-    // in index file set up loader and twig vars, create new login controller and pass twig in it
     public function index(): void
     {
-        echo 'login controller';
-        //echo $this->twig->render('login.twig');
-    }
+        $err = $_SESSION['loginErr'];
 
-    public function login(): void
-    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $user = $this->userRepository->getUserByEmail($_POST['email']);
 
+            if ($user !== []) {
+                $validUser = $this->userValidator->isValidCredentials($_POST['password'], $user);
+
+                if ($validUser) {
+                    $_SESSION['loggedUser'] = $user['name'];
+
+                    header("Location: /");
+                    exit();
+                }
+            }
+
+            $_SESSION['loginErr'] = 'Wrong user credentials.';
+        }
+
+        echo $this->twig->render('login.twig', ['err' => $err]);
     }
 }

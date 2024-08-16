@@ -30,14 +30,8 @@ class UserValidator
         return '';
     }
 
-    public function isValidCredentials(string $email,
-                                       string $password,
-                                       array $user): bool
+    public function isValidCredentials(string $password, array $user): bool
     {
-        if ($user['email'] === $email) {
-            return password_verify($password, $user['password']);
-        }
-
-        return false;
+        return password_verify($password, $user['password']);
     }
 }

@@ -30,7 +30,7 @@
 
         <input type="submit" name="submit" value="Hochladen">
         <p>{{ errors.limit ~ errors.validAmount}}</p>
-        <p>{% if errors.limit == '' and errors.validAmount == '' and submit %}
+        <p>{% if not errors and submit %}
                 Die Transaktion wurde erfolgreich gespeichert!
             {% endif %}
         </p>
@@ -39,3 +39,5 @@
 
 </body>
 </html>
+
+{#{% if errors.limit == '' and errors.validAmount == '' and submit %}#}

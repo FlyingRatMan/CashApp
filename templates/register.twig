@@ -26,9 +26,13 @@
         </label>
         <p>
             {{ errors.emailErr ~ errors.passErr }}
+            {% if errors.userExist %}
+                <p>User with such email already exist.</p>
+            {% endif %}
         </p>
 
-        <input type="submit" name="user" value="Sign up!">
+        <button type="submit" name="user">Sign up!</button>
+        <button type="button" onclick="window.location.href='index.php?page=login'">Log in</button>
     </form>
 
 </body>

@@ -33,7 +33,7 @@ $controller = $_GET['page'] ?? 'home';
 $method = $_SERVER['REQUEST_METHOD'];
 
 $controllerInit = match ($controller) {
-    'login' => new LoginController($twig),
+    'login' => new LoginController($twig,$userRepo, $userValid),
     'register' => new RegistrationController($twig, $userEntity, $userRepo, $userValid),
     'logout' => new LogoutController($twig),
     'home' => new HomeController($twig, $accEntity, $accRepo, $accValid),
@@ -41,12 +41,6 @@ $controllerInit = match ($controller) {
 
 $controllerInit->index();
 
-if ($method === 'POST' && $controller === 'home') {
-    $controllerInit->transfer();
-}
-if ($method === 'POST' && $controller === 'register') {
-    $controllerInit->register();
-}
 
 //  !!!old code
 /*$loader = new \Twig\Loader\FilesystemLoader('templates');

@@ -19,6 +19,35 @@ class RegistrationController
     ) {}
     public function index(): void
     {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $errors = [
+                'emailErr' => $this->userValidator->isValidEmail($_POST['email']),
+                'passErr' => $this->userValidator->isValidPassword($_POST['password']),
+                'userExist' => (bool)$this->userRepository->getUserByEmail($_POST['email']),
+            ];
+
+            $_SESSION['userErr'] = $errors;
+
+            if ($errors) {
+                $_SESSION['regName'] = $_POST['name'];
+                $_SESSION['regEmail'] = $_POST['email'];
+                $_SESSION['userErr'] = $errors;
+            }
+
+            if ($errors['emailErr'] === '' && $errors['passErr'] === '' && empty($errors['userExist'])) {
+                $user = [
+                    "name" => $_POST['name'],
+                    "email" => $_POST['email'],
+                    "password" => password_hash($_POST['password'], PASSWORD_DEFAULT),
+                ];
+
+                $this->userEntityManager->save($user);
+
+                header("Location: /index.php?page=login");
+                exit();
+            }
+        }
+
         $twigVars = [
             'userName' => $_SESSION['regName'] ?? null,
             'userEmail' => $_SESSION['regEmail'] ?? null,
@@ -26,35 +55,5 @@ class RegistrationController
         ];
 
         echo $this->twig->render('register.twig', $twigVars);
-    }
-
-    public function register(): void
-    {
-        $errors = [
-            'emailErr' => $this->userValidator->isValidEmail($_POST['email']),
-            'passErr' => $this->userValidator->isValidPassword($_POST['password']),
-            'userExist' => $this->userRepository->getUserByEmail($_POST['email']),
-        ];
-
-        $_SESSION['userErr'] = $errors;
-
-        if ($errors) {
-            $_SESSION['regName'] = $_POST['name'];
-            $_SESSION['regEmail'] = $_POST['email'];
-            $_SESSION['userErr'] = $errors;
-        }
-
-        if ($errors['emailErr'] === '' && $errors['passErr'] === '' && empty($errors['userExist'])) {
-            $user = [
-                "name" => $_POST['name'],
-                "email" => $_POST['email'],
-                "password" => password_hash($_POST['password'], PASSWORD_DEFAULT),
-            ];
-
-            $this->userEntityManager->save($user);
-
-            header("Location: /login");
-            exit();
-        }
     }
 }
