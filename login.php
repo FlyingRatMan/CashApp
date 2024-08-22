@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+/*declare(strict_types=1);
 session_start();
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -34,4 +34,4 @@ if (isset($_POST["login"])) {
 
 echo $twig->render('login.twig', [
     'submit' => isset($_POST["login"]),
-]);
+]);*/

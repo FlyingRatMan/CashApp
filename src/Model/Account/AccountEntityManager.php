@@ -1,19 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\EntityManager;
+namespace App\Model\Account;
 
-require __DIR__ . '/../../../vendor/autoload.php';
+use App\Model\DB\JsonManager;
 
-class AccountEntityManager
+readonly class AccountEntityManager
 {
     public function __construct(
         private JsonManager $jsonManager
     ) {}
 
-    /**
-     * @throws \JsonException
-     */
     public function add(array $data): void
     {
         $this->jsonManager->write($data);

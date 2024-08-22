@@ -1,21 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\EntityManager;
+namespace App\Model\DB;
 
-use App\Service\UserValidator;
-
-require __DIR__ . '/../../../vendor/autoload.php';
-
-class JsonManager
+readonly class JsonManager implements JsonManagerInterface
 {
     public function __construct(
-        private readonly string $pathToJson
+        private string $pathToJson
     ) {}
 
-    /**
-     * @throws \JsonException
-     */
     public function read(): array
     {
         if (!file_exists($this->pathToJson)) {

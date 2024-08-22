@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-require __DIR__ . '/../../vendor/autoload.php';
-
 class AccountValidator
 {
     public function limit(array $data, int $amount): string

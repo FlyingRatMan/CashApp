@@ -3,10 +3,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use Error;
-
-require __DIR__ . '/../../vendor/autoload.php';
-
 class UserValidator
 {
     public function isValidEmail(string $email): string

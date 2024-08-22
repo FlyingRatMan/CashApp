@@ -1,13 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\Repository;
+namespace App\Model\Account;
 
-use App\Model\EntityManager\JsonManager;
 
-require __DIR__ . '/../../../vendor/autoload.php';
+use App\Model\DB\JsonManager;
 
-class AccountRepository
+readonly class AccountRepository
 {
     public function __construct(
         private JsonManager $jsonManager
@@ -27,6 +26,6 @@ class AccountRepository
             $balance += $transaction['amount'];
         }
 
-        return (int)$balance;
+        return $balance;
     }
 }

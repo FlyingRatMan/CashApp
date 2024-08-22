@@ -3,15 +3,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Model\Repository\UserRepository;
+use App\Model\User\UserRepository;
 use App\Service\UserValidator;
+use Twig\Environment;
 
-require __DIR__ . '/../../vendor/autoload.php';
-
-class LoginController
+readonly class LoginController
 {
     public function __construct(
-        private $twig,
+        private Environment $twig,
         private UserRepository $userRepository,
         private UserValidator $userValidator,
     ) {}

@@ -1,13 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\EntityManager;
+namespace App\Model\User;
 
-use App\Model\Repository\UserRepository;
+use App\Model\DB\JsonManager;
 
-require __DIR__ . '/../../../vendor/autoload.php';
-
-class UserEntityManager
+readonly class UserEntityManager
 {
     public function __construct(
         private JsonManager $jsonManager

@@ -3,16 +3,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Model\EntityManager\UserEntityManager;
-use App\Model\Repository\UserRepository;
+use App\Model\User\UserEntityManager;
+use App\Model\User\UserRepository;
 use App\Service\UserValidator;
+use Twig\Environment;
 
-require __DIR__ . '/../../vendor/autoload.php';
-
-class RegistrationController
+readonly class RegistrationController
 {
     public function __construct(
-        private $twig,
+        private Environment $twig,
         private UserEntityManager $userEntityManager,
         private UserRepository $userRepository,
         private UserValidator $userValidator,

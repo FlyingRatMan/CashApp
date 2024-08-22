@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php /*declare(strict_types=1);
 require_once __DIR__ . '/vendor/autoload.php';
 
 use src\Model\EntityManager\UserEntityManager;
@@ -82,4 +82,4 @@ echo $twig->render('register.twig', [
     'userName' => $userName,
     'userEmail' => $userEmail,
     'errors' => $errors,
-]);
+]);*/
