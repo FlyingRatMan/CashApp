@@ -22,3 +22,10 @@ users.json
 
 # PHP Unit
 /phpunit.xml
+.phpunit.cache
+.phpunit.result.cache
+phpunit.xml.bak
+phpunit.xml
+
+/build/
+/coverage/

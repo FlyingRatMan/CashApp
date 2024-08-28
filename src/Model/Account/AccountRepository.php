@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Account;
 
-
 use App\Model\DB\JsonManager;
 
 readonly class AccountRepository

@@ -16,7 +16,7 @@ readonly class JsonManager implements JsonManagerInterface
         }
 
         $json = file_get_contents($this->pathToJson);
-        $json && $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
         return $data ?? [];
     }
 
