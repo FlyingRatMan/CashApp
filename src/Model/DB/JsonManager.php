@@ -5,9 +5,15 @@ namespace App\Model\DB;
 
 readonly class JsonManager implements JsonManagerInterface
 {
+    private string $pathToJson;
     public function __construct(
-        private string $pathToJson
-    ) {}
+        string $pathToJson
+    ) {
+        if(isset($_ENV['test'])) {
+            $pathToJson = str_replace('.json', '_test.json', $pathToJson);
+        }
+        $this->pathToJson = $pathToJson;
+    }
 
     public function read(): array
     {
@@ -17,7 +23,7 @@ readonly class JsonManager implements JsonManagerInterface
 
         $json = file_get_contents($this->pathToJson);
         $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-        return $data ?? [];
+        return $data;
     }
 
     public function write(array $d): void

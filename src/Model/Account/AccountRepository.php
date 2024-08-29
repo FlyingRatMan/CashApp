@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace App\Model\Account;
 
-use App\Model\DB\JsonManager;
+use App\Model\DB\JsonManagerInterface;
 
 readonly class AccountRepository
 {
     public function __construct(
-        private JsonManager $jsonManager
+        private JsonManagerInterface $jsonManager
     ) {}
 
     public function findAll(): array

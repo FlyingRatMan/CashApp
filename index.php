@@ -29,5 +29,7 @@ $controllerInit = match ($controller) {
     'logout' => $logoutController,
     'home' => $homeController,
 };
-
+//$view = new \App\Core\View();
 $controllerInit->index();
+
+//$view->display('login');

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Core\View;
 use App\Model\Account\AccountEntityManager;
 use App\Model\Account\AccountRepository;
 use App\Service\AccountValidator;
@@ -40,14 +41,13 @@ readonly class HomeController
             }
         }
 
-        $twigVars = [
-            'loggedUser' => $_SESSION['loggedUser'] ?? null,
-            'kontostand' => $this->accountRepository->getBalance(),
-            'amount' => $amount ?? null,
-            'errors' => $errors ?? null,
-            'submit' => isset($_POST['submit'])
-        ];
+        $view = new View($this->twig);
+        $view->addParameter('loggedUser', $_SESSION['loggedUser'] ?? null);
+        $view->addParameter('accBalance', $this->accountRepository->getBalance());
+        $view->addParameter('amount', $amount ?? null);
+        $view->addParameter('errors', $errors ?? null);
+        $view->addParameter('submit', isset($_POST['submit']));
 
-        echo $this->twig->render('index.twig', $twigVars);
+        $view->display('index');
     }
 }

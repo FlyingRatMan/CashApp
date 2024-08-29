@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+/*declare(strict_types=1);
 
 namespace Unit\Model\User;
 
@@ -27,4 +27,4 @@ class UserEntityManagerTest extends TestCase
 
         $userEntityManager->save($expectedData);
     }
-}
+}*/

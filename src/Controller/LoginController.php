@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Core\View;
 use App\Model\User\UserRepository;
 use App\Service\UserValidator;
 use Twig\Environment;
@@ -22,7 +23,7 @@ readonly class LoginController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $this->userRepository->getUserByEmail($_POST['email']);
 
-            if ($user !== []) {
+            if (!empty($user)) {
                 $validUser = $this->userValidator->isValidCredentials($_POST['password'], $user);
 
                 if ($validUser) {
@@ -36,6 +37,9 @@ readonly class LoginController
             $_SESSION['loginErr'] = 'Wrong user credentials.';
         }
 
-        echo $this->twig->render('login.twig', ['err' => $err]);
+        $view = new View($this->twig);
+        $view->addParameter('err', $err);
+
+        $view->display('login');
     }
 }

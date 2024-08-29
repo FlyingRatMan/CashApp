@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Core\View;
 use App\Model\User\UserEntityManager;
 use App\Model\User\UserRepository;
 use App\Service\UserValidator;
@@ -47,12 +48,11 @@ readonly class RegistrationController
             }
         }
 
-        $twigVars = [
-            'userName' => $_SESSION['regName'] ?? null,
-            'userEmail' => $_SESSION['regEmail'] ?? null,
-            'errors' => $_SESSION['userErr'] ?? null,
-        ];
+        $view = new View($this->twig);
+        $view->addParameter('userName', $_SESSION['regName'] ?? null);
+        $view->addParameter('userEmail', $_SESSION['regEmail'] ?? null);
+        $view->addParameter('errors', $_SESSION['userErr'] ?? null);
 
-        echo $this->twig->render('register.twig', $twigVars);
+        $view->display('register');
     }
 }
