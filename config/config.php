@@ -5,6 +5,7 @@ use App\Controller\HomeController;
 use App\Controller\LoginController;
 use App\Controller\LogoutController;
 use App\Controller\RegistrationController;
+use App\Core\View;
 use App\Model\Account\AccountEntityManager;
 use App\Model\Account\AccountRepository;
 use App\Model\DB\JsonManager;
@@ -37,6 +38,8 @@ return [
         ->constructorParameter('jsonManager', \DI\get('AccountJson')),
     UserRepository::class => \DI\autowire()
         ->constructorParameter('jsonManager', \DI\get('UserJson')),
+
+    View::class => \DI\autowire(),
 
     AccountValidator::class => \DI\autowire(),
     UserValidator::class => \DI\autowire(),

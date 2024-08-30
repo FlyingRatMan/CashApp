@@ -8,21 +8,24 @@ use Twig\Environment;
 class View implements ViewInterface
 {
     private array $parameters = [];
+    private string $template;
 
     public function __construct(
         private readonly Environment $twig,
-    )
-    {}
+    ) {}
 
     public function addParameter(string $key, mixed $value): void
     {
         $this->parameters[$key] = $value;
     }
 
-    //setTempate
-
-    public function display(string $template): void
+    public function setTemplate(string $template): void
     {
-        echo $this->twig->render($template . '.twig', $this->parameters);
+        $this->template = $template;
+    }
+
+    public function display(): void
+    {
+        echo $this->twig->render($this->template, $this->parameters);
     }
 }

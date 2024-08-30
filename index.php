@@ -9,6 +9,7 @@ use App\Controller\RegistrationController;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use App\Core\View;
 use DI\ContainerBuilder;
 
 $containerBuilder = new ContainerBuilder();
@@ -16,20 +17,17 @@ $containerBuilder->addDefinitions(__DIR__ . '/config/config.php');
 
 $container = $containerBuilder->build();
 
-$homeController = $container->get(HomeController::class);
-$loginController = $container->get(LoginController::class);
-$logoutController = $container->get(LogoutController::class);
-$registrationController = $container->get(RegistrationController::class);
-
 $controller = $_GET['page'] ?? 'home';
 
 $controllerInit = match ($controller) {
-    'login' => $loginController,
-    'register' => $registrationController,
-    'logout' => $logoutController,
-    'home' => $homeController,
+    'login' => $container->get(LoginController::class),
+    'register' => $container->get(RegistrationController::class),
+    'logout' => $container->get(LogoutController::class),
+    'home' => $container->get(HomeController::class),
 };
-//$view = new \App\Core\View();
+
+$view = $container->get(View::class);
+
 $controllerInit->index();
 
-//$view->display('login');
+$view->display();

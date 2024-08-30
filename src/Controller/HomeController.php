@@ -7,12 +7,11 @@ use App\Core\View;
 use App\Model\Account\AccountEntityManager;
 use App\Model\Account\AccountRepository;
 use App\Service\AccountValidator;
-use Twig\Environment;
 
 readonly class HomeController
 {
     public function __construct(
-        private Environment          $twig,
+        private View $view,
         private AccountEntityManager $accountEntityManager,
         private AccountRepository    $accountRepository,
         private AccountValidator     $accountValidator,
@@ -41,13 +40,12 @@ readonly class HomeController
             }
         }
 
-        $view = new View($this->twig);
-        $view->addParameter('loggedUser', $_SESSION['loggedUser'] ?? null);
-        $view->addParameter('accBalance', $this->accountRepository->getBalance());
-        $view->addParameter('amount', $amount ?? null);
-        $view->addParameter('errors', $errors ?? null);
-        $view->addParameter('submit', isset($_POST['submit']));
+        $this->view->setTemplate('index.twig');
 
-        $view->display('index');
+        $this->view->addParameter('loggedUser', $_SESSION['loggedUser'] ?? null);
+        $this->view->addParameter('accBalance', $this->accountRepository->getBalance());
+        $this->view->addParameter('amount', $amount ?? null);
+        $this->view->addParameter('errors', $errors ?? null);
+        $this->view->addParameter('submit', isset($_POST['submit']));
     }
 }

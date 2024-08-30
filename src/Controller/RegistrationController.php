@@ -7,12 +7,11 @@ use App\Core\View;
 use App\Model\User\UserEntityManager;
 use App\Model\User\UserRepository;
 use App\Service\UserValidator;
-use Twig\Environment;
 
 readonly class RegistrationController
 {
     public function __construct(
-        private Environment $twig,
+        private View $view,
         private UserEntityManager $userEntityManager,
         private UserRepository $userRepository,
         private UserValidator $userValidator,
@@ -48,11 +47,10 @@ readonly class RegistrationController
             }
         }
 
-        $view = new View($this->twig);
-        $view->addParameter('userName', $_SESSION['regName'] ?? null);
-        $view->addParameter('userEmail', $_SESSION['regEmail'] ?? null);
-        $view->addParameter('errors', $_SESSION['userErr'] ?? null);
+        $this->view->setTemplate('register.twig');
 
-        $view->display('register');
+        $this->view->addParameter('userName', $_SESSION['regName'] ?? null);
+        $this->view->addParameter('userEmail', $_SESSION['regEmail'] ?? null);
+        $this->view->addParameter('errors', $_SESSION['userErr'] ?? null);
     }
 }

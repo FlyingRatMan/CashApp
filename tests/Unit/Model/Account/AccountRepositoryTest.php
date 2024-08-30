@@ -1,5 +1,5 @@
 <?php
-/*declare(strict_types=1);
+declare(strict_types=1);
 
 namespace Unit\Model\Account;
 
@@ -9,38 +9,45 @@ use PHPUnit\Framework\TestCase;
 
 class AccountRepositoryTest extends TestCase
 {
+    private string $testFilePath;
+
+    protected function setUp(): void {
+        parent::setUp();
+
+        $this->testFilePath = __DIR__ . '/test.json';
+        if (file_exists($this->testFilePath)) {
+            unlink($this->testFilePath);
+        }
+    }
+
+    protected function tearDown(): void {
+        if (file_exists($this->testFilePath)) {
+            unlink($this->testFilePath);
+        }
+
+        parent::tearDown();
+    }
     public function testFindAllReturnsEmpty(): void
     {
-        $jsonManagerMock = $this->createMock(JsonManager::class);
+        $jsonManager = new JsonManager($this->testFilePath);
+        $accountRepository = new AccountRepository($jsonManager);
 
-        $jsonManagerMock
-            ->expects($this->once())
-            ->method('read')
-            ->willReturn([]);
-
-        $accountRepository = new AccountRepository($jsonManagerMock);
-
+        file_put_contents($this->testFilePath, json_encode([], JSON_THROW_ON_ERROR));
         $actualData = $accountRepository->findAll();
 
-        $this->assertEmpty($actualData);
+        $this->assertEmpty($actualData[0]);
     }
 
     public function testFindAllReturnsTransactions(): void
     {
+        $jsonManager = new JsonManager($this->testFilePath);
+        $accountRepository = new AccountRepository($jsonManager);
         $expectedData = [
             ['amount' => 22, 'date' => '2024-08-22 10:25:16'],
             ['amount' => 22, 'date' => '2024-08-22 10:25:16']
         ];
 
-        $jsonManagerMock = $this->createMock(JsonManager::class);
-
-        $jsonManagerMock
-            ->expects($this->once())
-            ->method('read')
-            ->willReturn($expectedData);
-
-        $accountRepository = new AccountRepository($jsonManagerMock);
-
+        file_put_contents($this->testFilePath, json_encode($expectedData, JSON_THROW_ON_ERROR));
         $actualData = $accountRepository->findAll();
 
         foreach ($actualData as $transaction) {
@@ -53,38 +60,27 @@ class AccountRepositoryTest extends TestCase
     }
 
     public function testGetBalanceReturnsZero(): void {
-        $jsonManagerMock = $this->createMock(JsonManager::class);
+        $jsonManager = new JsonManager($this->testFilePath);
+        $accountRepository = new AccountRepository($jsonManager);
 
-        $jsonManagerMock
-            ->expects($this->once())
-            ->method('read')
-            ->willReturn([]);
-
-        $accountRepository = new AccountRepository($jsonManagerMock);
-
+        file_put_contents($this->testFilePath, json_encode([], JSON_THROW_ON_ERROR));
         $actualData = $accountRepository->getBalance();
 
-        $this->assertEquals(0, $actualData);
+        $this->assertSame(0, $actualData);
     }
 
-    public function testGetBalanceReturnsAddedBalance(): void {
-        $expectedBalance = 20;
+    public function testGetBalanceReturnsCorrectBalance(): void {
+        $jsonManager = new JsonManager($this->testFilePath);
+        $accountRepository = new AccountRepository($jsonManager);
         $expectedData = [
             ['amount' => 13, 'date' => '2024-08-22 10:25:16'],
             ['amount' => 7, 'date' => '2024-08-22 10:25:16']
         ];
+        $expectedBalance = 20;
 
-        $jsonManagerMock = $this->createMock(JsonManager::class);
-
-        $jsonManagerMock
-            ->expects($this->once())
-            ->method('read')
-            ->willReturn($expectedData);
-
-        $accountRepository = new AccountRepository($jsonManagerMock);
-
+        file_put_contents($this->testFilePath, json_encode($expectedData, JSON_THROW_ON_ERROR));
         $actualBalance = $accountRepository->getBalance();
 
-        $this->assertEquals($expectedBalance, $actualBalance);
+        $this->assertSame($expectedBalance, $actualBalance);
     }
-}*/
+}

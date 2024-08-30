@@ -6,12 +6,7 @@ namespace App\Model\DB;
 readonly class JsonManager implements JsonManagerInterface
 {
     private string $pathToJson;
-    public function __construct(
-        string $pathToJson
-    ) {
-        if(isset($_ENV['test'])) {
-            $pathToJson = str_replace('.json', '_test.json', $pathToJson);
-        }
+    public function __construct(string $pathToJson) {
         $this->pathToJson = $pathToJson;
     }
 
