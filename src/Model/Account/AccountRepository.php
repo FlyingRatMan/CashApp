@@ -13,6 +13,7 @@ readonly class AccountRepository
 
     public function findAll(): array
     {
+        // TODO should it return dto?
         return $this->jsonManager->read();
     }
 

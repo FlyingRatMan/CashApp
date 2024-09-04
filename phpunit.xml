@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<phpunit
+        bootstrap="vendor/autoload.php"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.3/phpunit.xsd"
+        displayDetailsOnTestsThatTriggerWarnings="true"
+        cacheDirectory=".phpunit.cache"
+>
+  <coverage>
+    <report>
+      <html outputDirectory="build/coverage-html"/>
+      <clover outputFile="build/logs/clover.xml"/>
+      <text outputFile="php://stdout"/>
+    </report>
+  </coverage>
+  <testsuites>
+    <testsuite name="Unit Tests">
+      <directory>./tests/Unit</directory>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+    <exclude>
+      <directory suffix=".php">./tests</directory>
+    </exclude>
+  </source>
+  <php>
+    <env name="test" value="1"/>
+  </php>
+</phpunit>
+
+<!--./vendor/bin/phpunit-->

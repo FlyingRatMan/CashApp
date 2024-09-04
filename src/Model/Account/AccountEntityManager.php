@@ -11,8 +11,8 @@ readonly class AccountEntityManager
         private JsonManagerInterface $jsonManager
     ) {}
 
-    public function add(array $data): void
+    public function add(AccountDTO $data): void
     {
-        $this->jsonManager->write($data);
+        $this->jsonManager->write((array)$data);
     }
 }

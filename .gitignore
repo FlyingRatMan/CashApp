@@ -21,11 +21,9 @@ users.json
 !/var/log/.gitkeep
 
 # PHP Unit
-/phpunit.xml
 .phpunit.cache
 .phpunit.result.cache
 phpunit.xml.bak
-phpunit.xml
 
 /build/
 /coverage/

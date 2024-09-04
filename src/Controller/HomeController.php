@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Core\View;
 use App\Model\Account\AccountEntityManager;
+use App\Model\Account\AccountMapper;
 use App\Model\Account\AccountRepository;
 use App\Service\AccountValidator;
 
@@ -15,6 +16,7 @@ readonly class HomeController
         private AccountEntityManager $accountEntityManager,
         private AccountRepository    $accountRepository,
         private AccountValidator     $accountValidator,
+        private AccountMapper        $accountMapper,
     ) {}
     public function index(): void
     {
@@ -28,12 +30,12 @@ readonly class HomeController
             ];
 
             if ($errors['limit'] === '' && $errors['validAmount'] === '') {
-                $transfer = [
+                $transferDTO = $this->accountMapper->createAccountDTO([
                     'amount' => (float)$amount,
                     'date' => date('Y-m-d h:i:s')
-                ];
+                ]);
 
-                $this->accountEntityManager->add($transfer);
+                $this->accountEntityManager->add($transferDTO);
 
                 $amount = '';
                 $errors = [];

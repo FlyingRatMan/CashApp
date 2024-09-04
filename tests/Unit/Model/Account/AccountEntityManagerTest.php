@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Unit\Model\Account;
 
+use App\Model\Account\AccountDTO;
 use App\Model\Account\AccountEntityManager;
 use App\Model\DB\JsonManager;
 use PHPUnit\Framework\TestCase;
@@ -31,16 +32,13 @@ class AccountEntityManagerTest extends TestCase
     {
         $jsonManager = new JsonManager($this->testFilePath);
         $accountEntityManager = new AccountEntityManager($jsonManager);
-        $expectedData = [
-            'amount' => 100,
-            'date' => '2024-08-28'
-        ];
+        $expectedData = new AccountDTO(100, '2024-01-01');
 
         $accountEntityManager->add($expectedData);
         $actualData = json_decode(file_get_contents($this->testFilePath), true,512, JSON_THROW_ON_ERROR);
 
         $this->assertCount(1, $actualData);
         $this->assertSame(100, $actualData[0]['amount']);
-        $this->assertSame('2024-08-28', $actualData[0]['date']);
+        $this->assertSame('2024-01-01', $actualData[0]['date']);
     }
 }

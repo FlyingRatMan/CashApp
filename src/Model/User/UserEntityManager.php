@@ -11,8 +11,8 @@ readonly class UserEntityManager
         private JsonManagerInterface $jsonManager
     ) {}
 
-    public function save(array $user): void
+    public function save(UserDTO $user): void
     {
-        $this->jsonManager->write($user);
+        $this->jsonManager->write((array)$user);
     }
 }

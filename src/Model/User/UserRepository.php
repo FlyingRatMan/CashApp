@@ -17,6 +17,7 @@ readonly class UserRepository
 
         foreach ($users as $user) {
             if ($user['email'] === $email) {
+                // TODO should it return dto?
                 return $user;
             }
         }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Unit\Model\User;
 
 use App\Model\DB\JsonManager;
+use App\Model\User\UserDTO;
 use App\Model\User\UserEntityManager;
 use PHPUnit\Framework\TestCase;
 
@@ -30,11 +31,7 @@ class UserEntityManagerTest extends TestCase
     public function testSave(): void {
         $jsonManager = new JsonManager($this->testFilePath);
         $userEntityManager = new UserEntityManager($jsonManager);
-        $expectedData = [
-            'name' => 'name',
-            'email' => 'email@mail.com',
-            'password' => 'hashedPassword',
-        ];
+        $expectedData = new UserDTO('name', 'email', 'password');
 
         $userEntityManager->save($expectedData);
         $actualData = json_decode(file_get_contents($this->testFilePath), true, 512, JSON_THROW_ON_ERROR);

@@ -7,9 +7,11 @@ use App\Controller\LogoutController;
 use App\Controller\RegistrationController;
 use App\Core\View;
 use App\Model\Account\AccountEntityManager;
+use App\Model\Account\AccountMapper;
 use App\Model\Account\AccountRepository;
 use App\Model\DB\JsonManager;
 use App\Model\User\UserEntityManager;
+use App\Model\User\UserMapper;
 use App\Model\User\UserRepository;
 use App\Service\AccountValidator;
 use App\Service\UserValidator;
@@ -43,6 +45,9 @@ return [
 
     AccountValidator::class => \DI\autowire(),
     UserValidator::class => \DI\autowire(),
+
+    UserMapper::class => \DI\autowire(),
+    AccountMapper::class => \DI\autowire(),
 
     HomeController::class => \DI\autowire(),
     RegistrationController::class => \DI\autowire(),

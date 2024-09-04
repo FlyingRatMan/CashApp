@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Core\View;
 use App\Model\User\UserEntityManager;
+use App\Model\User\UserMapper;
 use App\Model\User\UserRepository;
 use App\Service\UserValidator;
 
@@ -15,6 +16,7 @@ readonly class RegistrationController
         private UserEntityManager $userEntityManager,
         private UserRepository $userRepository,
         private UserValidator $userValidator,
+        private UserMapper $userMapper,
     ) {}
     public function index(): void
     {
@@ -34,13 +36,13 @@ readonly class RegistrationController
             }
 
             if ($errors['emailErr'] === '' && $errors['passErr'] === '' && empty($errors['userExist'])) {
-                $user = [
-                    "name" => $_POST['name'],
-                    "email" => $_POST['email'],
-                    "password" => password_hash($_POST['password'], PASSWORD_DEFAULT),
-                ];
+                $userDTO = $this->userMapper->createUserDTO([
+                    'name' => $_POST['name'],
+                    'email' => $_POST['email'],
+                    'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+                ]);
 
-                $this->userEntityManager->save($user);
+                $this->userEntityManager->save($userDTO);
 
                 header("Location: /index.php?page=login");
                 exit();

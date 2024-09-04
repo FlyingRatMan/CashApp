@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Model\DB;
 
+use App\Model\Account\AccountDTO;
+use App\Model\User\UserDTO;
+
 readonly class JsonManager implements JsonManagerInterface
 {
     private string $pathToJson;
