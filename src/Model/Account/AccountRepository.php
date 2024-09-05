@@ -13,8 +13,20 @@ readonly class AccountRepository
 
     public function findAll(): array
     {
-        // TODO should it return dto?
-        return $this->jsonManager->read();
+        $data = $this->jsonManager->read();
+        $list = [];
+
+        if (empty($data)) {
+            return [];
+        }
+
+        foreach ($data as $account) {
+            $dto = new AccountDTO($account['amount'], $account['date']);
+
+            $list[] = $dto;
+        }
+
+        return $list;
     }
 
     public function getBalance(): int

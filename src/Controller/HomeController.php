@@ -7,7 +7,7 @@ use App\Core\View;
 use App\Model\Account\AccountEntityManager;
 use App\Model\Account\AccountMapper;
 use App\Model\Account\AccountRepository;
-use App\Service\AccountValidator;
+use App\Service\AccountValidatorInterface;
 
 readonly class HomeController
 {
@@ -15,7 +15,7 @@ readonly class HomeController
         private View $view,
         private AccountEntityManager $accountEntityManager,
         private AccountRepository    $accountRepository,
-        private AccountValidator     $accountValidator,
+        private AccountValidatorInterface     $accountValidator,
         private AccountMapper        $accountMapper,
     ) {}
     public function index(): void

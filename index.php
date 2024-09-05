@@ -31,5 +31,3 @@ $view = $container->get(View::class);
 $controllerInit->index();
 
 $view->display();
-
-// TODO repository should return dto?

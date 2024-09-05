@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-class UserValidator
+class UserValidator implements UserValidatorInterface
 {
     public function isValidEmail(string $email): string
     {
@@ -19,7 +19,7 @@ class UserValidator
         $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/';
 
         if (!preg_match($pattern, $password)) {
-            return"Password should be at least 6 characters long, and have special characters, numbers, 
+            return "Password should be at least 6 characters long, and have special characters, numbers, 
                     capital and lower case letters.";
         }
 

@@ -6,7 +6,7 @@ namespace App\Model\Account;
 readonly class AccountDTO
 {
     public function __construct(
-        public float $amount,
+        public float           $amount,
         public string $date,
     ) {}
 

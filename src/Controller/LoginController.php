@@ -5,14 +5,14 @@ namespace App\Controller;
 
 use App\Core\View;
 use App\Model\User\UserRepository;
-use App\Service\UserValidator;
+use App\Service\UserValidatorInterface;
 
 readonly class LoginController
 {
     public function __construct(
         private View $view,
         private UserRepository $userRepository,
-        private UserValidator $userValidator,
+        private UserValidatorInterface $userValidator,
     ) {}
 
     public function index(): void

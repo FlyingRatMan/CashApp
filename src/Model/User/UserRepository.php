@@ -11,17 +11,16 @@ readonly class UserRepository
         private JsonManagerInterface $jsonManager
     ) {}
 
-    public function getUserByEmail(string $email): array
+    public function getUserByEmail(string $email): ?UserDTO
     {
         $users = $this->jsonManager->read();
 
         foreach ($users as $user) {
             if ($user['email'] === $email) {
-                // TODO should it return dto?
-                return $user;
+                return new UserDTO($user['name'], $user['email'], $user['password']);
             }
         }
 
-        return [];
+        return null;
     }
 }

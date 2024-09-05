@@ -14,7 +14,9 @@ use App\Model\User\UserEntityManager;
 use App\Model\User\UserMapper;
 use App\Model\User\UserRepository;
 use App\Service\AccountValidator;
+use App\Service\AccountValidatorInterface;
 use App\Service\UserValidator;
+use App\Service\UserValidatorInterface;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -43,8 +45,8 @@ return [
 
     View::class => \DI\autowire(),
 
-    AccountValidator::class => \DI\autowire(),
-    UserValidator::class => \DI\autowire(),
+    AccountValidatorInterface::class => \DI\autowire(AccountValidator::class),
+    UserValidatorInterface::class => \DI\autowire(UserValidator::class),
 
     UserMapper::class => \DI\autowire(),
     AccountMapper::class => \DI\autowire(),

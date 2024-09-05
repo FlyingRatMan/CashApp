@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-class AccountValidator
+class AccountValidator implements AccountValidatorInterface
 {
     public function limit(array $data, int $amount): string
     {
@@ -12,20 +12,20 @@ class AccountValidator
 
         $today = date("Y-m-d 00:00:00");
 
-        foreach ($data as $entry) {
-            $diff = date_diff(date_create($today), date_create($entry["date"]));
-            $hourDiff = date_create($entry["date"])->diff(date_create());
+        foreach ($data as $accountDTO) {
+            $diff = date_diff(date_create($today), date_create($accountDTO->getDate()));
+            $hourDiff = date_create($accountDTO->getDate())->diff(date_create());
             if ($diff->d === 0) {
-                $dailyLimit += $entry["amount"];
+                $dailyLimit += $accountDTO->getAmount();
             }
             if ($hourDiff->format("%H") === "00") {
-                $hourlyLimit += $entry["amount"];
+                $hourlyLimit += $accountDTO->getAmount();
             }
         }
         $hourlyLimit += $amount;
         $dailyLimit += $amount;
 
-        if ($dailyLimit > 500 || $amount > 500) {
+        if ($dailyLimit > 500) {
             return 'Daily limit of 500 is exceeded.';
         }
         if ( $hourlyLimit > 100) {

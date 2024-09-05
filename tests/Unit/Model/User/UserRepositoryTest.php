@@ -27,17 +27,17 @@ class UserRepositoryTest extends TestCase
 
         parent::tearDown();
     }
-    public function testGetUserByEmailReturnsEmpty(): void {
+    public function testGetUserByEmailReturnsNull(): void {
         $jsonManager = new JsonManager($this->testFilePath);
         $userRepository = new UserRepository($jsonManager);
 
         file_put_contents($this->testFilePath, json_encode([], JSON_THROW_ON_ERROR));
         $actualData = $userRepository->getUserByEmail('user@doesnt.exist');
 
-        $this->assertEmpty($actualData);
+        $this->assertNull($actualData);
     }
 
-    public function testGetUserByEmailReturnsUser(): void {
+    public function testGetUserByEmailReturnsUserDTO(): void {
         $jsonManager = new JsonManager($this->testFilePath);
         $userRepository = new UserRepository($jsonManager);
         $expectedData = [
@@ -57,6 +57,6 @@ class UserRepositoryTest extends TestCase
         file_put_contents($this->testFilePath, json_encode($usersData, JSON_THROW_ON_ERROR));
         $actualData = $userRepository->getUserByEmail('email@mail.com');
 
-        $this->assertSame($expectedData, $actualData);
+        $this->assertSame($expectedData, (array)$actualData);
     }
 }

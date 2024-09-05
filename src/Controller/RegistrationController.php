@@ -7,7 +7,7 @@ use App\Core\View;
 use App\Model\User\UserEntityManager;
 use App\Model\User\UserMapper;
 use App\Model\User\UserRepository;
-use App\Service\UserValidator;
+use App\Service\UserValidatorInterface;
 
 readonly class RegistrationController
 {
@@ -15,7 +15,7 @@ readonly class RegistrationController
         private View $view,
         private UserEntityManager $userEntityManager,
         private UserRepository $userRepository,
-        private UserValidator $userValidator,
+        private UserValidatorInterface $userValidator,
         private UserMapper $userMapper,
     ) {}
     public function index(): void

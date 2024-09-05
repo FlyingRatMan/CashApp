@@ -37,6 +37,6 @@ class UserEntityManagerTest extends TestCase
         $actualData = json_decode(file_get_contents($this->testFilePath), true, 512, JSON_THROW_ON_ERROR);
 
         $this->assertCount(1, $actualData);
-        $this->assertSame($expectedData, $actualData[0]);
+        $this->assertSame((array)$expectedData, $actualData[0]);
     }
 }

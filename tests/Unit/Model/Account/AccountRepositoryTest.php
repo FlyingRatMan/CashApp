@@ -35,7 +35,7 @@ class AccountRepositoryTest extends TestCase
         file_put_contents($this->testFilePath, json_encode([], JSON_THROW_ON_ERROR));
         $actualData = $accountRepository->findAll();
 
-        $this->assertEmpty($actualData[0]);
+        $this->assertEmpty($actualData);
     }
 
     public function testFindAllReturnsTransactions(): void
@@ -51,11 +51,12 @@ class AccountRepositoryTest extends TestCase
         $actualData = $accountRepository->findAll();
 
         foreach ($actualData as $transaction) {
-            $this->assertIsArray($transaction);
-            $this->assertArrayHasKey('amount', $transaction);
-            $this->assertIsInt($transaction['amount']);
-            $this->assertArrayHasKey('date', $transaction);
-            $this->assertIsString($transaction['date']);
+            $arr = (array) $transaction;
+            $this->assertIsArray($arr);
+            $this->assertArrayHasKey('amount', $arr);
+            $this->assertIsFloat($arr['amount']);
+            $this->assertArrayHasKey('date', $arr);
+            $this->assertIsString($arr['date']);
         }
     }
 
