@@ -9,5 +9,5 @@ interface UserValidatorInterface
 
     public function isValidPassword(string $password): string;
 
-    public function isValidCredentials(string $password, array $user): bool;
+    public function isValidCredentials(string $password, string $savedPassword): bool;
 }

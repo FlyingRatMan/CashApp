@@ -26,8 +26,8 @@ class UserValidator implements UserValidatorInterface
         return '';
     }
 
-    public function isValidCredentials(string $password, array $user): bool
+    public function isValidCredentials(string $password, string $savedPassword): bool
     {
-        return password_verify($password, $user['password']);
+        return password_verify($password, $savedPassword);
     }
 }

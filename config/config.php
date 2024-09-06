@@ -15,6 +15,7 @@ use App\Model\User\UserMapper;
 use App\Model\User\UserRepository;
 use App\Service\AccountValidator;
 use App\Service\AccountValidatorInterface;
+use App\Service\ControllerProvider;
 use App\Service\UserValidator;
 use App\Service\UserValidatorInterface;
 use Twig\Environment;
@@ -51,6 +52,7 @@ return [
     UserMapper::class => \DI\autowire(),
     AccountMapper::class => \DI\autowire(),
 
+    ControllerProvider::class => \DI\autowire(),
     HomeController::class => \DI\autowire(),
     RegistrationController::class => \DI\autowire(),
     LoginController::class => \DI\autowire(),

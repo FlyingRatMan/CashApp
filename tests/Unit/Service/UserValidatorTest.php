@@ -56,9 +56,7 @@ class UserValidatorTest extends TestCase
     public function testValidCredentials(): void
     {
         $password = '12QWqw,.';
-        $existingPassword = [
-            'password' => password_hash('12QWqw,.', PASSWORD_DEFAULT)
-        ];
+        $existingPassword = password_hash('12QWqw,.', PASSWORD_DEFAULT);
 
         $result = $this->validator->isValidCredentials($password, $existingPassword);
 
@@ -68,9 +66,7 @@ class UserValidatorTest extends TestCase
     public function testInvalidCredentials(): void
     {
         $password = '23WEwe,.';
-        $existingPassword = [
-            'password' => password_hash('12QWqw,.', PASSWORD_DEFAULT)
-        ];
+        $existingPassword = password_hash('12QWqw,.', PASSWORD_DEFAULT);
 
         $result = $this->validator->isValidCredentials($password, $existingPassword);
 

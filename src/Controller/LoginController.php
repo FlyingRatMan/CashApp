@@ -21,10 +21,10 @@ readonly class LoginController
             $user = $this->userRepository->getUserByEmail($_POST['email']);
 
             if (!empty($user)) {
-                $validUser = $this->userValidator->isValidCredentials($_POST['password'], $user);
+                $validUser = $this->userValidator->isValidCredentials($_POST['password'], $user->getPassword());
 
                 if ($validUser) {
-                    $_SESSION['loggedUser'] = $user['name'];
+                    $_SESSION['loggedUser'] = $user->getName();
 
                     header("Location: /");
                     exit();

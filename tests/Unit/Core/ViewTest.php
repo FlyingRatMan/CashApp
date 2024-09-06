@@ -46,14 +46,28 @@ class ViewTest extends TestCase
         $this->assertSame('index.twig', $template);
     }
 
-    /*public function testDisplay(): void
+    public function testDisplay(): void
     {
+        $templateContent = <<<'TEMPLATE'
+                <html>
+                    <div>{{ test }}</div>
+                </html>
+            TEMPLATE;
         $expected = <<<'EXPECTED'
-        <html>
-            <div>Awesome template here</div>
-        </html>
-        EXPECTED;
+                <html>
+                    <div>Testing template rendering</div>
+                </html>
+            EXPECTED;
+        file_put_contents(__DIR__ . '/../../../src/View/templates/test.twig', $templateContent);
+        $this->view->setTemplate('test.twig');
+        $this->view->addParameter('test', 'Testing template rendering');
 
+        ob_start();
+        $this->view->display();
+        $actual = ob_get_clean();
 
-    }*/
+        $this->assertSame($expected, $actual);
+
+        unlink(__DIR__ . '/../../../src/View/templates/test.twig');
+    }
 }
