@@ -3,16 +3,25 @@ declare(strict_types=1);
 
 namespace App\Model\User;
 
-use App\Model\DB\JsonManagerInterface;
+use App\Model\DB\SqlConnector;
 
 readonly class UserEntityManager
 {
     public function __construct(
-        private JsonManagerInterface $jsonManager
+        private SqlConnector $sqlConnector,
     ) {}
 
-    public function save(UserDTO $user): void
+    public function save(UserDTO $userDTO): void
     {
-        $this->jsonManager->write((array)$user);
+        $db = $this->sqlConnector::getConnection();
+        $query = "INSERT INTO Users (name, email, password) VALUES (:name, :email, :password)";
+
+        $values = [
+            ':name' => $userDTO->getName(),
+            ':email' => $userDTO->getEmail(),
+            ':password' => $userDTO->getPassword(),
+        ];
+
+        $db->insert($query, $values);
     }
 }

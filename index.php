@@ -2,6 +2,7 @@
 declare(strict_types=1);
 session_start();
 
+use App\Model\DB\SqlConnector;
 use App\Service\ControllerProvider;
 use App\Core\View;
 use DI\ContainerBuilder;

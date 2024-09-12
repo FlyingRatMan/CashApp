@@ -27,8 +27,6 @@
     </exclude>
   </source>
   <php>
-    <env name="test" value="1"/>
+    <env name="DATABASE" value="cash_test" />
   </php>
 </phpunit>
-
-<!--./vendor/bin/phpunit-->

@@ -7,6 +7,8 @@ use App\Model\DB\JsonManagerInterface;
 
 readonly class AccountRepository
 {
+    // TODO SQLCONNECTOR INSTEAD OF JSONMANAGER
+    // todo methods should prepare a query to execute in sqlconnector
     public function __construct(
         private JsonManagerInterface $jsonManager
     ) {}
