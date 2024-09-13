@@ -9,6 +9,6 @@ class UserMapper
 
     public function createUserDTO(array $data): UserDTO
     {
-        return new UserDTO($data['name'], $data['email'], $data['password']);
+        return new UserDTO($data['id'], $data['name'], $data['email'], $data['password']);
     }
 }

@@ -25,6 +25,7 @@ readonly class LoginController
 
                 if ($validUser) {
                     $_SESSION['loggedUser'] = $user->getName();
+                    $_SESSION['loggedUserId'] = $user->getId();
 
                     header("Location: /");
                     exit();

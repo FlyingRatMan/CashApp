@@ -3,43 +3,43 @@ declare(strict_types=1);
 
 namespace App\Model\Account;
 
-use App\Model\DB\JsonManagerInterface;
+use App\Model\DB\SqlConnector;
 
 readonly class AccountRepository
 {
-    // TODO SQLCONNECTOR INSTEAD OF JSONMANAGER
-    // todo methods should prepare a query to execute in sqlconnector
     public function __construct(
-        private JsonManagerInterface $jsonManager
+        private SqlConnector $sqlConnector,
     ) {}
 
-    public function findAll(): array
+    public function findAll(int $userID): array
     {
-        $data = $this->jsonManager->read();
+        $db = $this->sqlConnector::getConnection();
+        $query = 'SELECT * FROM Account';
+        $transactions = $db->select($query);
         $list = [];
 
-        if (empty($data)) {
+        if (empty($transactions)) {
             return [];
         }
-
-        foreach ($data as $account) {
-            $dto = new AccountDTO($account['amount'], $account['date']);
-
-            $list[] = $dto;
+        foreach ($transactions as $transaction) {
+            if ($transaction['user_id'] === $userID) {
+                $accountDTO = new AccountDTO($transaction['amount'], $transaction['date']);
+                $list[] = $accountDTO;
+            }
         }
 
         return $list;
     }
 
-    public function getBalance(): int
+    public function getBalance(int $userID): int
     {
         $balance = 0;
-        $data = $this->jsonManager->read();
+        $transactions = $this->findAll($userID);
 
-        foreach ($data as $transaction) {
-            $balance += $transaction['amount'];
+        foreach ($transactions as $transaction) {
+            $balance += $transaction->getAmount();
         }
 
-        return $balance;
+        return (int)$balance;
     }
 }

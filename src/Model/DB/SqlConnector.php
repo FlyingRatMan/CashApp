@@ -41,13 +41,18 @@ class SqlConnector
     {
         $stmt = $this->pdo->prepare($query);
         $stmt->execute($params);
+
         return $stmt->fetchAll();
     }
 
     public function insert(string $query, array $params): bool
     {
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute($params);
+        foreach ($params as $param => $value) {
+            $stmt->bindValue($param, $value, PDO::PARAM_STR);
+        }
+        $stmt->execute();
+
         return (bool)$this->pdo->lastInsertId();
     }
 }

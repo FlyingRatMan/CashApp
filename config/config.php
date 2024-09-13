@@ -10,6 +10,7 @@ use App\Model\Account\AccountEntityManager;
 use App\Model\Account\AccountMapper;
 use App\Model\Account\AccountRepository;
 use App\Model\DB\JsonManager;
+use App\Model\DB\SqlConnector;
 use App\Model\User\UserEntityManager;
 use App\Model\User\UserMapper;
 use App\Model\User\UserRepository;
@@ -28,21 +29,13 @@ return [
     Environment::class => \DI\create(Environment::class)
         ->constructor(\DI\get(FilesystemLoader::class)),
 
-    'UserJson' => \DI\create(JsonManager::class)
-        ->constructor('users.json'),
+    SqlConnector::class => \DI\create(SqlConnector::class),
 
-    'AccountJson' => \DI\create(JsonManager::class)
-        ->constructor('account.json'),
+    AccountEntityManager::class => \DI\autowire(),
+    UserEntityManager::class => \DI\autowire(),
 
-    AccountEntityManager::class => \DI\autowire()
-        ->constructorParameter('jsonManager', \DI\get('AccountJson')),
-    UserEntityManager::class => \DI\autowire()
-        ->constructorParameter('jsonManager', \DI\get('UserJson')),
-
-    AccountRepository::class => \DI\autowire()
-        ->constructorParameter('jsonManager', \DI\get('AccountJson')),
-    UserRepository::class => \DI\autowire()
-        ->constructorParameter('jsonManager', \DI\get('UserJson')),
+    AccountRepository::class => \DI\autowire(),
+    UserRepository::class => \DI\autowire(),
 
     View::class => \DI\autowire(),
 

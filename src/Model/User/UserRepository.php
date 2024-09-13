@@ -22,7 +22,7 @@ readonly class UserRepository
         $users = $this->findAll();
         foreach ($users as $user) {
             if ($user['email'] === $email) {
-                return new UserDTO($user['name'], $user['email'], $user['password']);
+                return new UserDTO($user['id'], $user['name'], $user['email'], $user['password']);
             }
         }
         return null;

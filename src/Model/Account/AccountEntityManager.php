@@ -3,18 +3,25 @@ declare(strict_types=1);
 
 namespace App\Model\Account;
 
-use App\Model\DB\JsonManagerInterface;
+use App\Model\DB\SqlConnector;
 
 readonly class AccountEntityManager
 {
-    // TODO SQLCONNECTOR INSTEAD OF JSONMANAGER
-    // todo methods should prepare a query to execute in sqlconnector
     public function __construct(
-        private JsonManagerInterface $jsonManager
+        private SqlConnector $sqlConnector,
     ) {}
 
-    public function add(AccountDTO $data): void
+    public function add(AccountDTO $accountDTO, $userID): void
     {
-        $this->jsonManager->write((array)$data);
+        $db = $this->sqlConnector::getConnection();
+        $query = "INSERT INTO Account (user_id, amount, date) VALUES (:user_id, :amount, :date)";
+
+        $values = [
+            'user_id' => $userID,
+            'amount' => $accountDTO->getAmount(),
+            'date' => $accountDTO->getDate(),
+        ];
+
+        $db->insert($query, $values);
     }
 }
