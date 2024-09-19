@@ -6,27 +6,27 @@
         displayDetailsOnTestsThatTriggerWarnings="true"
         cacheDirectory=".phpunit.cache"
 >
-  <coverage>
-    <report>
-      <html outputDirectory="build/coverage-html"/>
-      <clover outputFile="build/logs/clover.xml"/>
-      <text outputFile="php://stdout"/>
-    </report>
-  </coverage>
-  <testsuites>
-    <testsuite name="Unit Tests">
-      <directory>./tests/Unit</directory>
-    </testsuite>
-  </testsuites>
-  <source>
-    <include>
-      <directory suffix=".php">./src</directory>
-    </include>
-    <exclude>
-      <directory suffix=".php">./tests</directory>
-    </exclude>
-  </source>
-  <php>
-    <env name="DATABASE" value="cash_test" />
-  </php>
+    <php>
+        <env name="DATABASE" value="cash_test" force="true"/>
+    </php>
+    <coverage>
+        <report>
+            <html outputDirectory="build/coverage-html"/>
+            <clover outputFile="build/logs/clover.xml"/>
+            <text outputFile="php://stdout"/>
+        </report>
+    </coverage>
+    <testsuites>
+        <testsuite name="Unit Tests">
+            <directory>./tests/</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+        <exclude>
+            <directory suffix=".php">./tests</directory>
+        </exclude>
+    </source>
 </phpunit>

@@ -3,38 +3,39 @@ declare(strict_types=1);
 
 namespace Unit\Model\User;
 
-use App\Model\DB\JsonManager;
+use App\Model\DB\SqlConnector;
 use App\Model\User\UserDTO;
 use App\Model\User\UserEntityManager;
 use PHPUnit\Framework\TestCase;
 
 class UserEntityManagerTest extends TestCase
 {
-    private string $testFilePath;
+    private SqlConnector $sqlConnector;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         parent::setUp();
 
-        $this->testFilePath = __DIR__ . '/test.json';
-        if (file_exists($this->testFilePath)) {
-            unlink($this->testFilePath);
-        }
+        $this->sqlConnector = new SqlConnector();
     }
 
-    protected function tearDown(): void {
-        if (file_exists($this->testFilePath)) {
-            unlink($this->testFilePath);
-        }
+    protected function tearDown(): void
+    {
+        $this->sqlConnector->insert("SET FOREIGN_KEY_CHECKS=0", []);
+        $this->sqlConnector->insert("TRUNCATE TABLE Users", []);
+        $this->sqlConnector->insert("TRUNCATE TABLE Account", []);
+        $this->sqlConnector->insert("SET FOREIGN_KEY_CHECKS=1", []);
 
         parent::tearDown();
     }
-    public function testSave(): void {
-        $jsonManager = new JsonManager($this->testFilePath);
-        $userEntityManager = new UserEntityManager($jsonManager);
-        $expectedData = new UserDTO('name', 'email', 'password');
+
+    public function testSave(): void
+    {
+        $userEntityManager = new UserEntityManager($this->sqlConnector);
+        $expectedData = new UserDTO(1, 'name', 'email', 'password');
 
         $userEntityManager->save($expectedData);
-        $actualData = json_decode(file_get_contents($this->testFilePath), true, 512, JSON_THROW_ON_ERROR);
+        $actualData = $this->sqlConnector->select("SELECT * FROM Users WHERE id = :id", ['id' => 1]);
 
         $this->assertCount(1, $actualData);
         $this->assertSame((array)$expectedData, $actualData[0]);

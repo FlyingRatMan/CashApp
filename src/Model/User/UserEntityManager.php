@@ -16,12 +16,12 @@ readonly class UserEntityManager
         $db = $this->sqlConnector::getConnection();
         $query = "INSERT INTO Users (name, email, password) VALUES (:name, :email, :password)";
 
-        $values = [
-            ':name' => $userDTO->getName(),
-            ':email' => $userDTO->getEmail(),
-            ':password' => $userDTO->getPassword(),
+        $params = [
+            ':name' => $userDTO->name,
+            ':email' => $userDTO->email,
+            ':password' => $userDTO->password,
         ];
 
-        $db->insert($query, $values);
+        $db->insert($query, $params);
     }
 }

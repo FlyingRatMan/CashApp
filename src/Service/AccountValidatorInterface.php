@@ -9,7 +9,5 @@ interface AccountValidatorInterface
 
     public function isValidAmount(string $amount): string;
 
-    public function sanitize(string $input): string;
-
     public function transform(string $input): string;
 }

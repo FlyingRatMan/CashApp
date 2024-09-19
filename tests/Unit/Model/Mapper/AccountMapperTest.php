@@ -18,7 +18,7 @@ class AccountMapperTest extends TestCase
 
         $actualAccountDTO = $mapper->createAccountDTO($expectedTransaction);
 
-        $this->assertSame($expectedTransaction['amount'], $actualAccountDTO->getAmount());
-        $this->assertSame($expectedTransaction['date'], $actualAccountDTO->getDate());
+        $this->assertSame($expectedTransaction['amount'], $actualAccountDTO->amount);
+        $this->assertSame($expectedTransaction['date'], $actualAccountDTO->date);
     }
 }

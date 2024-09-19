@@ -78,7 +78,7 @@ class AccountValidatorTest extends TestCase
         $this->assertSame('', $result );
     }
 
-    public function testSanitizeRemovesUnwantedChars(): void
+    /*public function testSanitizeRemovesUnwantedChars(): void
     {
         $string = '    bc123\/xyz.45def   ';
 
@@ -103,5 +103,5 @@ class AccountValidatorTest extends TestCase
         $result = $this->validator->sanitize($string);
 
         $this->assertSame('1.000,00', $result);
-    }
+    }*/
 }

@@ -5,7 +5,6 @@ namespace App\Model\DB;
 
 use PDO;
 use PDOException;
-use PDOStatement;
 
 class SqlConnector
 {
@@ -14,11 +13,10 @@ class SqlConnector
 
     public function __construct()
     {
-        $database = 'cash';
-        $host = 'localhost:3336';
+        $database = $_ENV['DATABASE'] ?? 'cash';
+        $dsn = 'mysql:host=localhost:3336;dbname=' . $database;
         $user = 'root';
         $password = 'nexus123';
-        $dsn = 'mysql:host=' . $host . ';dbname=' . $database;
 
         try {
             $this->pdo = new PDO($dsn, $user, $password);
@@ -40,7 +38,10 @@ class SqlConnector
     public function select(string $query, array $params = []): array
     {
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute($params);
+        foreach ($params as $param => $value) {
+            $stmt->bindValue($param, $value, PDO::PARAM_STR);
+        }
+        $stmt->execute();
 
         return $stmt->fetchAll();
     }

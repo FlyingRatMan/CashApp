@@ -14,32 +14,19 @@ readonly class AccountRepository
     public function findAll(int $userID): array
     {
         $db = $this->sqlConnector::getConnection();
-        $query = 'SELECT * FROM Account';
-        $transactions = $db->select($query);
-        $list = [];
+        $query = 'SELECT * FROM Account WHERE id = :userID';
+        $transactions = $db->select($query, ['userID' => $userID]);
 
         if (empty($transactions)) {
             return [];
         }
+
+        $list = [];
         foreach ($transactions as $transaction) {
-            if ($transaction['user_id'] === $userID) {
-                $accountDTO = new AccountDTO($transaction['amount'], $transaction['date']);
-                $list[] = $accountDTO;
-            }
+            $accountDTO = new AccountDTO($transaction['amount'], $transaction['date']);
+            $list[] = $accountDTO;
         }
 
         return $list;
-    }
-
-    public function getBalance(int $userID): int
-    {
-        $balance = 0;
-        $transactions = $this->findAll($userID);
-
-        foreach ($transactions as $transaction) {
-            $balance += $transaction->getAmount();
-        }
-
-        return (int)$balance;
     }
 }

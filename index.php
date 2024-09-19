@@ -12,7 +12,7 @@ $containerBuilder = new ContainerBuilder();
 $containerBuilder->addDefinitions(__DIR__ . '/config/config.php');
 $container = $containerBuilder->build();
 
-$controller = $_GET['page'];
+$controller = $_GET['page'] ?? 'home';
 
 $controllerProvider = $container->get(ControllerProvider::class);
 $controllerList = $controllerProvider->getList();

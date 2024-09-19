@@ -14,14 +14,15 @@ readonly class AccountEntityManager
     public function add(AccountDTO $accountDTO, $userID): void
     {
         $db = $this->sqlConnector::getConnection();
-        $query = "INSERT INTO Account (user_id, amount, date) VALUES (:user_id, :amount, :date)";
+        $query = "INSERT INTO Account (user_id, amount, date) 
+            VALUES (:user_id, :amount, :date)";
 
-        $values = [
+        $params = [
             'user_id' => $userID,
-            'amount' => $accountDTO->getAmount(),
-            'date' => $accountDTO->getDate(),
+            'amount' => $accountDTO->amount,
+            'date' => $accountDTO->date,
         ];
 
-        $db->insert($query, $values);
+        $db->insert($query, $params);
     }
 }

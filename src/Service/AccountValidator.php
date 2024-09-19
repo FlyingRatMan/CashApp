@@ -13,13 +13,13 @@ class AccountValidator implements AccountValidatorInterface
         $today = date("Y-m-d 00:00:00");
 
         foreach ($data as $accountDTO) {
-            $diff = date_diff(date_create($today), date_create($accountDTO->getDate()));
-            $hourDiff = date_create($accountDTO->getDate())->diff(date_create());
+            $diff = date_diff(date_create($today), date_create($accountDTO->date));
+            $hourDiff = date_create($accountDTO->date)->diff(date_create());
             if ($diff->d === 0) {
-                $dailyLimit += $accountDTO->getAmount();
+                $dailyLimit += $accountDTO->amount;
             }
             if ($hourDiff->format("%H") === "00") {
-                $hourlyLimit += $accountDTO->getAmount();
+                $hourlyLimit += $accountDTO->amount;
             }
         }
         $hourlyLimit += $amount;
@@ -47,19 +47,17 @@ class AccountValidator implements AccountValidatorInterface
         return '';
     }
 
-    public function sanitize(string $input): string
+    private function sanitize(string $input): string
     {
         $input = trim($input);
         $input = stripslashes($input);
         $input = htmlspecialchars($input);
         return preg_replace('/[^0-9,.]/', '', $input);
-
     }
 
     public function transform(string $input): string
     {
         $sanitizedInput = $this->sanitize($input);
-        $onlyComas = str_replace(".", "", $sanitizedInput);
-        return str_replace(",", ".", $onlyComas);
+        return str_replace([".", ","], ["", "."], $sanitizedInput);
     }
 }

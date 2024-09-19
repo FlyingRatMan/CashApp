@@ -9,13 +9,4 @@ readonly class AccountDTO
         public float  $amount,
         public string $date,
     ) {}
-
-    public function getAmount(): float
-    {
-        return $this->amount;
-    }
-    public function getDate(): string
-    {
-        return $this->date;
-    }
 }

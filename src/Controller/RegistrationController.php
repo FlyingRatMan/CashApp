@@ -12,12 +12,13 @@ use App\Service\UserValidatorInterface;
 readonly class RegistrationController
 {
     public function __construct(
-        private View $view,
-        private UserEntityManager $userEntityManager,
-        private UserRepository $userRepository,
+        private View                   $view,
+        private UserEntityManager      $userEntityManager,
+        private UserRepository         $userRepository,
         private UserValidatorInterface $userValidator,
-        private UserMapper $userMapper,
+        private UserMapper             $userMapper,
     ) {}
+
     public function index(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

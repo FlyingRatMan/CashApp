@@ -10,8 +10,8 @@ use App\Service\UserValidatorInterface;
 readonly class LoginController
 {
     public function __construct(
-        private View $view,
-        private UserRepository $userRepository,
+        private View                   $view,
+        private UserRepository         $userRepository,
         private UserValidatorInterface $userValidator,
     ) {}
 
@@ -21,11 +21,11 @@ readonly class LoginController
             $user = $this->userRepository->getUserByEmail($_POST['email']);
 
             if (!empty($user)) {
-                $validUser = $this->userValidator->isValidCredentials($_POST['password'], $user->getPassword());
+                $validUser = $this->userValidator->isValidCredentials($_POST['password'], $user->password);
 
                 if ($validUser) {
-                    $_SESSION['loggedUser'] = $user->getName();
-                    $_SESSION['loggedUserId'] = $user->getId();
+                    $_SESSION['loggedUser'] = $user->name;
+                    $_SESSION['loggedUserId'] = $user->id;
 
                     header("Location: /");
                     exit();

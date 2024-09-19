@@ -17,15 +17,13 @@ readonly class HomeController
         private AccountRepository         $accountRepository,
         private AccountValidatorInterface $accountValidator,
         private AccountMapper             $accountMapper,
-    )
-    {
-    }
+    ) {}
 
     public function index(): void
     {
         $id = $_SESSION['loggedUserId'];
         if ($_SESSION['loggedUser']) {
-            $balance = $this->accountRepository->getBalance($id);
+            $balance = $this->getBalance($id);
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['loggedUser']) {
@@ -57,5 +55,17 @@ readonly class HomeController
         $this->view->addParameter('amount', $amount ?? null);
         $this->view->addParameter('errors', $errors ?? null);
         $this->view->addParameter('submit', isset($_POST['submit']));
+    }
+
+    private function getBalance(int $userID): int
+    {
+        $balance = 0;
+        $transactions = $this->accountRepository->findAll($userID);
+
+        foreach ($transactions as $transaction) {
+            $balance += $transaction->amount;
+        }
+
+        return (int)$balance;
     }
 }

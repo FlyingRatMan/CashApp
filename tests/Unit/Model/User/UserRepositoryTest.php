@@ -3,60 +3,58 @@ declare(strict_types=1);
 
 namespace Unit\Model\User;
 
-use App\Model\DB\JsonManager;
+use App\Model\DB\SqlConnector;
 use App\Model\User\UserRepository;
 use PHPUnit\Framework\TestCase;
 
 class UserRepositoryTest extends TestCase
 {
-    private string $testFilePath;
+    private SqlConnector $sqlConnector;
+    private UserRepository $userRepository;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         parent::setUp();
 
-        $this->testFilePath = __DIR__ . '/test.json';
-        if (file_exists($this->testFilePath)) {
-            unlink($this->testFilePath);
-        }
+        $this->sqlConnector = new SqlConnector();
+        $this->userRepository = new UserRepository($this->sqlConnector);
     }
 
-    protected function tearDown(): void {
-        if (file_exists($this->testFilePath)) {
-            unlink($this->testFilePath);
-        }
+    protected function tearDown(): void
+    {
+        $this->sqlConnector->insert("SET FOREIGN_KEY_CHECKS=0", []);
+        $this->sqlConnector->insert("TRUNCATE TABLE Users", []);
+        $this->sqlConnector->insert("TRUNCATE TABLE Account", []);
+        $this->sqlConnector->insert("SET FOREIGN_KEY_CHECKS=1", []);
 
         parent::tearDown();
     }
-    public function testGetUserByEmailReturnsNull(): void {
-        $jsonManager = new JsonManager($this->testFilePath);
-        $userRepository = new UserRepository($jsonManager);
 
-        file_put_contents($this->testFilePath, json_encode([], JSON_THROW_ON_ERROR));
-        $actualData = $userRepository->getUserByEmail('user@doesnt.exist');
+    public function testGetUserByEmailReturnsNull(): void
+    {
+        $actualData = $this->userRepository->getUserByEmail("test@test.com");
 
         $this->assertNull($actualData);
     }
 
-    public function testGetUserByEmailReturnsUserDTO(): void {
-        $jsonManager = new JsonManager($this->testFilePath);
-        $userRepository = new UserRepository($jsonManager);
+    public function testGetUserByEmailReturnsUserDTO(): void
+    {
         $expectedData = [
-            'name' => 'name',
-            'email' => 'email@mail.com',
-            'password' => 'hashedPassword',
+            'name' => 'Test User',
+            'email' => 'test@test.com',
+            'password' => 'password',
         ];
-        $usersData = [
-            $expectedData,
-            [
-                'name' => 'name',
-                'email' => 'another@mail.com',
-                'password' => 'hashedPassword',
-            ]
-        ];
+        $query = "INSERT INTO Users (name, email, password) VALUES (:name, :email, :password)";
+        $this->sqlConnector->insert($query, [
+            'name' => 'Test User',
+            'email' => 'test@test.com',
+            'password' => 'password',
+        ]);
 
-        file_put_contents($this->testFilePath, json_encode($usersData, JSON_THROW_ON_ERROR));
-        $actualData = $userRepository->getUserByEmail('email@mail.com');
+        $actualData = $this->userRepository->getUserByEmail('test@test.com');
 
-        $this->assertSame($expectedData, (array)$actualData);
+        $this->assertSame($expectedData['name'], $actualData->name);
+        $this->assertSame($expectedData['email'], $actualData->email);
+        $this->assertSame($expectedData['password'], $actualData->password);
     }
 }

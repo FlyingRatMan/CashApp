@@ -12,6 +12,7 @@ class UserMapperTest extends TestCase
     {
         $mapper = new UserMapper();
         $expectedUser = [
+            'id' => 1,
             'name' => 'John Doe',
             'email' => 'john@doe.com',
             'password' => 'hashed_password',
@@ -19,8 +20,8 @@ class UserMapperTest extends TestCase
 
         $actualUserDTO = $mapper->createUserDTO($expectedUser);
 
-        $this->assertSame($expectedUser['name'], $actualUserDTO->getName());
-        $this->assertSame($expectedUser['email'], $actualUserDTO->getEmail());
-        $this->assertSame($expectedUser['password'], $actualUserDTO->getPassword());
+        $this->assertSame($expectedUser['name'], $actualUserDTO->name);
+        $this->assertSame($expectedUser['email'], $actualUserDTO->email);
+        $this->assertSame($expectedUser['password'], $actualUserDTO->password);
     }
 }
