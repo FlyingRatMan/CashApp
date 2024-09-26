@@ -9,6 +9,7 @@ class View implements ViewInterface
 {
     private array $parameters = [];
     private string $template;
+    private string $redirectTo = "";
 
     public function __construct(
         private readonly Environment $twig,
@@ -24,8 +25,18 @@ class View implements ViewInterface
         $this->template = $template;
     }
 
-    public function display(): void
+    public function display(): ?string
     {
-        echo $this->twig->render($this->template, $this->parameters);
+        if(!empty($this->redirectTo)) {
+            header($this->redirectTo);
+            return null;
+        }
+
+        return $this->twig->render($this->template, $this->parameters);
+    }
+
+    public function setRedirect(string $to): void
+    {
+        $this->redirectTo = "Location: " . $to;
     }
 }

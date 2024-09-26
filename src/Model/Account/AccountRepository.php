@@ -14,7 +14,7 @@ readonly class AccountRepository
     public function findAll(int $userID): array
     {
         $db = $this->sqlConnector::getConnection();
-        $query = 'SELECT * FROM Account WHERE id = :userID';
+        $query = 'SELECT * FROM Account WHERE user_id = :userID';
         $transactions = $db->select($query, ['userID' => $userID]);
 
         if (empty($transactions)) {
@@ -23,7 +23,7 @@ readonly class AccountRepository
 
         $list = [];
         foreach ($transactions as $transaction) {
-            $accountDTO = new AccountDTO($transaction['amount'], $transaction['date']);
+            $accountDTO = new AccountDTO($transaction['id'], $transaction['user_id'], $transaction['amount'], $transaction['date']);
             $list[] = $accountDTO;
         }
 

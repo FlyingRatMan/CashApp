@@ -21,14 +21,16 @@ readonly class HomeController
 
     public function index(): void
     {
-        $id = $_SESSION['loggedUserId'];
-        if ($_SESSION['loggedUser']) {
-            $balance = $this->getBalance($id);
+        if (!$_SESSION['loggedUser']) {
+            $this->view->setRedirect('/index.php?page=login');
+            return;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['loggedUser']) {
+        $user_id = $_SESSION['loggedUserId'];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $amount = $this->accountValidator->transform($_POST['amount']);
-            $transfers = $this->accountRepository->findAll($id);
+            $transfers = $this->accountRepository->findAll($user_id);
 
             $errors = [
                 'limit' => $this->accountValidator->limit($transfers, (int)$_POST['amount']),
@@ -37,16 +39,20 @@ readonly class HomeController
 
             if ($errors['limit'] === '' && $errors['validAmount'] === '') {
                 $transferDTO = $this->accountMapper->createAccountDTO([
+                    'id' => 1,
+                    'user_id' => $user_id,
                     'amount' => (float)$amount,
                     'date' => date('Y-m-d h:i:s')
                 ]);
 
-                $this->accountEntityManager->add($transferDTO, $id);
+                $this->accountEntityManager->add($transferDTO, $user_id);
 
                 $amount = '';
                 $errors = [];
             }
         }
+
+        $balance = $this->getBalance($user_id);
 
         $this->view->setTemplate('index.twig');
 
@@ -57,7 +63,7 @@ readonly class HomeController
         $this->view->addParameter('submit', isset($_POST['submit']));
     }
 
-    private function getBalance(int $userID): int
+    public function getBalance(int $userID): int
     {
         $balance = 0;
         $transactions = $this->accountRepository->findAll($userID);

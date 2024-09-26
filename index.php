@@ -23,4 +23,7 @@ $controllerInit = $container->get($controllerClass);
 $controllerInit->index();
 
 $view = $container->get(View::class);
-$view->display();
+$output = $view->display();
+if($output) {
+    echo $output;
+}

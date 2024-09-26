@@ -5,6 +5,7 @@ use App\Controller\HomeController;
 use App\Controller\LoginController;
 use App\Controller\LogoutController;
 use App\Controller\RegistrationController;
+use App\Core\Redirect;
 use App\Core\View;
 use App\Model\Account\AccountEntityManager;
 use App\Model\Account\AccountMapper;
@@ -38,6 +39,7 @@ return [
     UserRepository::class => \DI\autowire(),
 
     View::class => \DI\autowire(),
+    Redirect::class => \DI\autowire(),
 
     AccountValidatorInterface::class => \DI\autowire(AccountValidator::class),
     UserValidatorInterface::class => \DI\autowire(UserValidator::class),

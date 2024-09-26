@@ -11,9 +11,13 @@ use Twig\Loader\FilesystemLoader;
 class ViewTest extends TestCase
 {
     private View $view;
+    private $reflection;
+    private $twigPath;
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $loader = new FilesystemLoader('src/View/templates');
         $twig = new Environment($loader, [
             'debug' => true,
@@ -21,14 +25,31 @@ class ViewTest extends TestCase
         ]);
 
         $this->view = new View($twig);
+        $this->reflection = new \ReflectionClass($this->view);
+
+        $this->twigPath =  __DIR__ . '/../../../src/View/templates/test.twig';
+        $template = <<<'TEMPLATE'
+                <html>
+                    <div>{{ test }}</div>
+                </html>
+            TEMPLATE;
+        file_put_contents($this->twigPath, $template);
+    }
+
+    protected function tearDown(): void
+    {
+        if (file_exists($this->twigPath)) {
+            unlink($this->twigPath);
+        }
+
+        parent::tearDown();
     }
 
     public function testAddParameter(): void
     {
         $this->view->addParameter('key', 'value');
 
-        $reflection = new \ReflectionClass($this->view);
-        $parametersProperty = $reflection->getProperty('parameters');
+        $parametersProperty = $this->reflection->getProperty('parameters');
         $parameters = $parametersProperty->getValue($this->view);
 
         $this->assertArrayHasKey('key', $parameters);
@@ -39,35 +60,42 @@ class ViewTest extends TestCase
     {
         $this->view->setTemplate('index.twig');
 
-        $reflection = new \ReflectionClass($this->view);
-        $templateProperty = $reflection->getProperty('template');
+        $templateProperty = $this->reflection->getProperty('template');
         $template = $templateProperty->getValue($this->view);
 
         $this->assertSame('index.twig', $template);
     }
 
+    public function testRedirect(): void
+    {
+        $this->view->setRedirect('/index.php?page=login');
+
+        $redirectProperty = $this->reflection->getProperty('redirectTo');
+        $redirect = $redirectProperty->getValue($this->view);
+
+        $this->assertSame('Location: /index.php?page=login', $redirect);
+    }
+
     public function testDisplay(): void
     {
-        $templateContent = <<<'TEMPLATE'
-                <html>
-                    <div>{{ test }}</div>
-                </html>
-            TEMPLATE;
         $expected = <<<'EXPECTED'
                 <html>
-                    <div>Testing template rendering</div>
+                    <div>Testing template rendering...</div>
                 </html>
             EXPECTED;
-        file_put_contents(__DIR__ . '/../../../src/View/templates/test.twig', $templateContent);
+
         $this->view->setTemplate('test.twig');
-        $this->view->addParameter('test', 'Testing template rendering');
+        $this->view->addParameter('test', 'Testing template rendering...');
 
-        ob_start();
-        $this->view->display();
-        $actual = ob_get_clean();
+        $result = $this->view->display();
 
-        $this->assertSame($expected, $actual);
+        $this->assertSame($expected, $result);
+    }
 
-        unlink(__DIR__ . '/../../../src/View/templates/test.twig');
+    public function testDisplayIfRedirectSet(): void
+    {
+        $this->view->setRedirect('/index.php?page=login');
+
+        $this->assertNull($this->view->display());
     }
 }

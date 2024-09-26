@@ -7,6 +7,6 @@ class AccountMapper
 {
     public function createAccountDTO(array $data): AccountDTO
     {
-        return new AccountDTO($data['amount'], $data['date']);
+        return new AccountDTO($data['id'], $data['user_id'], $data['amount'], $data['date']);
     }
 }

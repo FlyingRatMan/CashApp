@@ -30,7 +30,7 @@ class AccountValidatorTest extends TestCase
     public function testDailyLimitExceeded(): void
     {
         $data = [
-            new AccountDTO(500, date("Y-m-d H:i:s")),
+            new AccountDTO(1, 1, 500, date("Y-m-d H:i:s")),
         ];
         $amount = 10;
 
@@ -42,7 +42,7 @@ class AccountValidatorTest extends TestCase
     public function testHourlyLimitExceeded(): void
     {
         $data = [
-            new AccountDTO(100, date("Y-m-d H:i:s")),
+            new AccountDTO(1, 1, 100, date("Y-m-d H:i:s")),
         ];
         $amount = 10;
 

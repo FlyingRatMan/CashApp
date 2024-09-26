@@ -45,7 +45,7 @@ class AccountRepositoryTest extends TestCase
             VALUES (:user_id, :amount, :date)";
         $expectedData = [
             'user_id' => 1,
-            'amount' => 50,
+            'amount' => 50.0,
             'date' => '2024-08-01 00:00:00'
         ];
 
@@ -62,41 +62,12 @@ class AccountRepositoryTest extends TestCase
         foreach ($actualData as $transaction) {
             $arr = (array)$transaction;
             $this->assertIsArray($arr);
+            $this->assertArrayHasKey('user_id', $arr);
+            $this->assertSame(1, $arr['user_id']);
             $this->assertArrayHasKey('amount', $arr);
-            $this->assertIsFloat($arr['amount']);
+            $this->assertSame(50.0, $arr['amount']);
             $this->assertArrayHasKey('date', $arr);
-            $this->assertIsString($arr['date']);
+            $this->assertSame('2024-08-01 00:00:00', $arr['date']);
         }
     }
-
-    /*public function testGetBalanceReturnsZero(): void
-    {
-
-
-        $jsonManager = new JsonManager($this->testFilePath);
-        $accountRepository = new AccountRepository($jsonManager);
-
-        file_put_contents($this->testFilePath, json_encode([], JSON_THROW_ON_ERROR));
-        $actualData = $accountRepository->getBalance();
-
-        $this->assertSame(0, $actualData);
-    }
-
-    public function testGetBalanceReturnsCorrectBalance(): void
-    {
-
-
-        $jsonManager = new JsonManager($this->testFilePath);
-        $accountRepository = new AccountRepository($jsonManager);
-        $expectedData = [
-            ['amount' => 13, 'date' => '2024-08-22 10:25:16'],
-            ['amount' => 7, 'date' => '2024-08-22 10:25:16']
-        ];
-        $expectedBalance = 20;
-
-        file_put_contents($this->testFilePath, json_encode($expectedData, JSON_THROW_ON_ERROR));
-        $actualBalance = $accountRepository->getBalance();
-
-        $this->assertSame($expectedBalance, $actualBalance);
-    }*/
 }

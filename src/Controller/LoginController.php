@@ -27,8 +27,8 @@ readonly class LoginController
                     $_SESSION['loggedUser'] = $user->name;
                     $_SESSION['loggedUserId'] = $user->id;
 
-                    header("Location: /");
-                    exit();
+                    $this->view->setRedirect('/');
+                    return;
                 }
             }
 

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Core\Redirect;
 use App\Core\View;
 use App\Model\User\UserEntityManager;
 use App\Model\User\UserMapper;
@@ -38,6 +39,7 @@ readonly class RegistrationController
 
             if ($errors['emailErr'] === '' && $errors['passErr'] === '' && empty($errors['userExist'])) {
                 $userDTO = $this->userMapper->createUserDTO([
+                    'id' => 0,
                     'name' => $_POST['name'],
                     'email' => $_POST['email'],
                     'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
@@ -45,8 +47,8 @@ readonly class RegistrationController
 
                 $this->userEntityManager->save($userDTO);
 
-                header("Location: /index.php?page=login");
-                exit();
+                $this->view->setRedirect('/index.php?page=login');
+                return;
             }
         }
 
