@@ -22,9 +22,6 @@ class HomeControllerTest extends TestCase
     private View $view;
     private HomeController $homeController;
     private AccountEntityManager $accountEntityManager;
-    private AccountRepository $accountRepository;
-    private AccountValidator $accountValidator;
-    private AccountMapper $accountMapper;
 
     protected function setUp(): void
     {
@@ -39,15 +36,15 @@ class HomeControllerTest extends TestCase
         $this->sqlConnector = new SqlConnector();
         $this->view = new View($twig);
         $this->accountEntityManager = new AccountEntityManager($this->sqlConnector);
-        $this->accountRepository = new AccountRepository($this->sqlConnector);
-        $this->accountValidator = new AccountValidator();
-        $this->accountMapper = new AccountMapper();
+        $accountRepository = new AccountRepository($this->sqlConnector);
+        $accountValidator = new AccountValidator();
+        $accountMapper = new AccountMapper();
         $this->homeController = new HomeController(
             $this->view,
             $this->accountEntityManager,
-            $this->accountRepository,
-            $this->accountValidator,
-            $this->accountMapper
+            $accountRepository,
+            $accountValidator,
+            $accountMapper
         );
 
         $insertUserQuery = "INSERT INTO Users (name, email, password) VALUES (:name, :email, :password)";
@@ -93,9 +90,7 @@ class HomeControllerTest extends TestCase
         $_SESSION['loggedUser'] = false;
         $this->homeController->index();
 
-        $reflection = new \ReflectionClass($this->view);
-        $redirectProperty = $reflection->getProperty('redirectTo');
-        $redirect = $redirectProperty->getValue($this->view);
+        $redirect = $this->view->getRedirectTo();
 
         $this->assertSame('Location: /index.php?page=login', $redirect);
     }
@@ -105,12 +100,32 @@ class HomeControllerTest extends TestCase
         $_SESSION['loggedUser'] = new UserDTO(1, 'test', 'test@t.de', 'password');
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST['amount'] = '50';
-        $accountDTO = new AccountDTO(1, 1, 50.0, '2024-01-01 00:00:00');
+        $_SESSION['loggedUserId'] = 1;
 
-        $this->accountEntityManager->add($accountDTO, 1);
         $this->homeController->index();
 
-        $reflection = new \ReflectionClass($this->view);
+        $template = $this->view->getTemplate();
+        $parameters = $this->view->getParameters();
 
+        $this->assertSame('index.twig', $template);
+        $this->assertEmpty($parameters['errors']);
+        $this->assertSame(50, $parameters['accBalance']);
+    }
+
+    public function testIndexPostWithErrors(): void
+    {
+        $_SESSION['loggedUser'] = new UserDTO(1, 'test', 'test@t.de', 'password');
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['amount'] = '999999';
+        $_SESSION['loggedUserId'] = 1;
+
+        $this->homeController->index();
+
+        $template = $this->view->getTemplate();
+        $parameters = $this->view->getParameters();
+
+        $this->assertSame('index.twig', $template);
+        $this->assertNotEmpty($parameters['errors']['limit']);
+        $this->assertSame(0, $parameters['accBalance']);
     }
 }

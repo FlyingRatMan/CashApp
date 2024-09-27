@@ -7,8 +7,8 @@ use Twig\Environment;
 
 class View implements ViewInterface
 {
-    private array $parameters = [];
-    private string $template;
+    protected array $parameters = [];
+    protected string $template;
     private string $redirectTo = "";
 
     public function __construct(
@@ -38,5 +38,20 @@ class View implements ViewInterface
     public function setRedirect(string $to): void
     {
         $this->redirectTo = "Location: " . $to;
+    }
+
+    public function getParameters(): array
+    {
+        return $this->parameters;
+    }
+
+    public function getTemplate(): string
+    {
+        return $this->template;
+    }
+
+    public function getRedirectTo(): string
+    {
+        return $this->redirectTo;
     }
 }

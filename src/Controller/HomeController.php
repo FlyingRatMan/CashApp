@@ -56,7 +56,7 @@ readonly class HomeController
 
         $this->view->setTemplate('index.twig');
 
-        $this->view->addParameter('loggedUser', $_SESSION['loggedUser'] ?? null);
+        $this->view->addParameter('loggedUser', $_SESSION['loggedUser']);
         $this->view->addParameter('accBalance', $balance);
         $this->view->addParameter('amount', $amount ?? null);
         $this->view->addParameter('errors', $errors ?? null);

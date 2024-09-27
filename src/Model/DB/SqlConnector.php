@@ -9,7 +9,7 @@ use PDOException;
 class SqlConnector
 {
     private PDO $pdo;
-    private static $connection = null;
+    private static ?SqlConnector $connection = null;
 
     public function __construct()
     {
