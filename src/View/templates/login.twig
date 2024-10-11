@@ -4,24 +4,29 @@
     <meta charset="UTF-8">
     <title>Login</title>
 </head>
-<body>
+<body style="height: 100vh;">
 
-<form method="POST">
-    <label for="email"> E-Mail:
-        <input required
-               type="email"
-               name="email">
-    </label>
-    <label for="password"> Password:
-        <input required
-               type="password"
-               name="password">
-    </label>
+<div style="position: absolute; width: 100vw;">
+    <form method="POST"
+          style="display: flex; flex-direction: column; align-items: center; justify-content: space-around; margin: 130px auto;">
 
-    <button type="submit" name="login">Log in!</button>
-    <a href="http://localhost:8080/index.php?page=register">Don't have an account yet?</a>
-    <p>{{ err }}</p>
-</form>
+        <label for="email"> E-Mail:
+            <input
+                    type="email"
+                    name="email">
+        </label>
+        <label for="password"> Password:
+            <input
+                    type="password"
+                    name="password">
+        </label>
+
+        <button type="submit" name="login">Log in!</button>
+        <button type="submit" name="reset">Forgot your password?</button>
+        <a href="http://localhost:8080/index.php?page=register">Don't have an account yet?</a>
+        <p>{{ err }}</p>
+    </form>
+</div>
 
 </body>
 </html>

@@ -24,4 +24,19 @@ readonly class UserEntityManager
 
         $db->insert($query, $params);
     }
+
+    public function updatePassword(UserDTO $userDTO, string $password): void
+    {
+        $db = $this->sqlConnector::getConnection();
+        $query = "UPDATE Users SET name = :name, email = :email, password = :password WHERE id = :id";
+
+        $params = [
+            ':name' => $userDTO->name,
+            ':email' => $userDTO->email,
+            ':password' => $password,
+            ':id' => $userDTO->id,
+        ];
+
+        $db->update($query, $params);
+    }
 }

@@ -17,6 +17,11 @@ readonly class LoginController
 
     public function index(): void
     {
+        if (isset($_POST['reset'])) {
+            $this->view->setRedirect('/index.php?page=forgotPassword');
+            return;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $this->userRepository->getUserByEmail($_POST['email']);
 
