@@ -35,9 +35,19 @@ class LoginControllerTest extends TestCase
         $this->loginController = new LoginController($this->view, $userRepository, $userValidator);
     }
 
+    public function testIndexOnResetPassword(): void
+    {
+        $_POST['reset'] = true;
+
+        $this->loginController->index();
+        $redirect = $this->view->getRedirectTo();
+
+        $this->assertSame('Location: /index.php?page=forgotPassword', $redirect);
+    }
+
     public function testIndexInvalidUser(): void
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['login'] = true;
         $_POST['email'] = 'invalidEmail';
         $_POST['password'] = 'invalidPassword';
 
@@ -50,7 +60,7 @@ class LoginControllerTest extends TestCase
 
     public function testIndexValidUser(): void
     {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_POST['login'] = true;
         $_POST['email'] = 'test@test.com';
         $_POST['password'] = 'test';
 
@@ -62,5 +72,15 @@ class LoginControllerTest extends TestCase
         $redirect = $this->view->getRedirectTo();
 
         $this->assertSame('Location: /', $redirect);
+    }
+
+    public function testIndex(): void
+    {
+        unset($_POST['login'], $_POST['reset']);
+
+        $this->loginController->index();
+        $template = $this->view->getTemplate();
+
+        $this->assertSame('login.twig', $template);
     }
 }

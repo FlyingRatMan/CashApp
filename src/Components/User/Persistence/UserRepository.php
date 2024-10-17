@@ -1,21 +1,17 @@
 <?php
-/*declare(strict_types=1);
+declare(strict_types=1);
 
-namespace App\Model\User;
+namespace App\Components\User\Persistence;
 
+use App\Components\User\UserDTO;
 use App\Model\DB\SqlConnector;
 
-readonly class UserRepository
+class UserRepository
 {
     public function __construct(
+        private UserMapper  $userMapper,
         private SqlConnector $sqlConnector,
     ) {}
-
-    public function findAll(): array {
-        $db = $this->sqlConnector::getConnection();
-        $query = 'SELECT * FROM Users';
-        return $db->select($query);
-    }
 
     public function getUserByEmail(string $email): ?UserDTO
     {
@@ -25,9 +21,9 @@ readonly class UserRepository
 
         if ($data) {
             $user = $data[0];
-            return new UserDTO($user['id'], $user['name'], $user['email'], $user['password']);
+            return $this->userMapper->createUserDTO($user);
         }
 
         return null;
     }
-}*/
+}

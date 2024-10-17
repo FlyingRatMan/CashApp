@@ -1,11 +1,12 @@
 <?php
-/*declare(strict_types=1);
+declare(strict_types=1);
 
-namespace App\Model\User;
+namespace App\Components\User\Persistence;
 
+use App\Components\User\UserDTO;
 use App\Model\DB\SqlConnector;
 
-readonly class UserEntityManager
+class UserEntityManager
 {
     public function __construct(
         private SqlConnector $sqlConnector,
@@ -39,4 +40,4 @@ readonly class UserEntityManager
 
         $db->update($query, $params);
     }
-}*/
+}

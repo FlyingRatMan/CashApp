@@ -63,6 +63,7 @@ class SqlConnector
         foreach ($params as $param => $value) {
             $stmt->bindValue($param, $value, PDO::PARAM_STR);
         }
+
         return $stmt->execute();
     }
 }

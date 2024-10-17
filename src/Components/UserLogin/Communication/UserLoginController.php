@@ -1,24 +1,24 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Components\UserLogin\Communication;
 
-use App\Components\User\Persistence\UserRepository;
+use App\Components\User\Business\UserBusinessFacade;
 use App\Core\View;
 use App\Service\UserValidatorInterface;
 
-readonly class LoginController
+class UserLoginController
 {
     public function __construct(
         private View                   $view,
-        private UserRepository         $userRepository,
+        private UserBusinessFacade     $userFacade,
         private UserValidatorInterface $userValidator,
     ) {}
 
     public function index(): void
     {
         if (isset($_POST['login'])) {
-            $user = $this->userRepository->getUserByEmail($_POST['email']);
+            $user = $this->userFacade->getUserByEmail($_POST['email']);
 
             if (!empty($user)) {
                 $validUser = $this->userValidator->isValidCredentials($_POST['password'], $user->password);

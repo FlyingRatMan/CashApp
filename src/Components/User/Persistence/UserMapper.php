@@ -1,7 +1,9 @@
 <?php
-/*declare(strict_types=1);
+declare(strict_types=1);
 
-namespace App\Model\User;
+namespace App\Components\User\Persistence;
+
+use App\Components\User\UserDTO;
 
 class UserMapper
 {
@@ -9,4 +11,4 @@ class UserMapper
     {
         return new UserDTO($data['id'], $data['name'], $data['email'], $data['password']);
     }
-}*/
+}

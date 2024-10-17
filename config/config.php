@@ -1,9 +1,12 @@
 <?php
 declare(strict_types=1);
 
+use App\Components\User\Persistence\UserEntityManager;
+use App\Components\User\Persistence\UserMapper;
+use App\Components\User\Persistence\UserRepository;
+use App\Components\UserLogin\Communication\UserLoginController;
 use App\Controller\ForgotPasswordController;
 use App\Controller\HomeController;
-use App\Controller\LoginController;
 use App\Controller\LogoutController;
 use App\Controller\ResetPasswordController;
 use App\Controller\RegistrationController;
@@ -12,9 +15,6 @@ use App\Model\Account\AccountEntityManager;
 use App\Model\Account\AccountMapper;
 use App\Model\Account\AccountRepository;
 use App\Model\DB\SqlConnector;
-use App\Model\User\UserEntityManager;
-use App\Model\User\UserMapper;
-use App\Model\User\UserRepository;
 use App\Service\AccountValidator;
 use App\Service\AccountValidatorInterface;
 use App\Service\ControllerProvider;
@@ -49,7 +49,7 @@ return [
     ControllerProvider::class => \DI\autowire(),
     HomeController::class => \DI\autowire(),
     RegistrationController::class => \DI\autowire(),
-    LoginController::class => \DI\autowire(),
+    UserLoginController::class => \DI\autowire(),
     LogoutController::class => \DI\autowire(),
     ResetPasswordController::class => \DI\autowire(),
     ForgotPasswordController::class => \DI\autowire(),

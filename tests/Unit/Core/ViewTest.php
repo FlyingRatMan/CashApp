@@ -11,7 +11,6 @@ use Twig\Loader\FilesystemLoader;
 class ViewTest extends TestCase
 {
     private View $view;
-    private $reflection;
     private $twigPath;
 
     protected function setUp(): void
@@ -25,7 +24,6 @@ class ViewTest extends TestCase
         ]);
 
         $this->view = new View($twig);
-        $this->reflection = new \ReflectionClass($this->view);
 
         $this->twigPath =  __DIR__ . '/../../../src/View/templates/test.twig';
         $template = <<<'TEMPLATE'
@@ -49,8 +47,7 @@ class ViewTest extends TestCase
     {
         $this->view->addParameter('key', 'value');
 
-        $parametersProperty = $this->reflection->getProperty('parameters');
-        $parameters = $parametersProperty->getValue($this->view);
+        $parameters = $this->view->getParameters();
 
         $this->assertArrayHasKey('key', $parameters);
         $this->assertSame('value', $parameters['key']);
@@ -60,8 +57,7 @@ class ViewTest extends TestCase
     {
         $this->view->setTemplate('index.twig');
 
-        $templateProperty = $this->reflection->getProperty('template');
-        $template = $templateProperty->getValue($this->view);
+        $template = $this->view->getTemplate();
 
         $this->assertSame('index.twig', $template);
     }
@@ -70,8 +66,7 @@ class ViewTest extends TestCase
     {
         $this->view->setRedirect('/index.php?page=login');
 
-        $redirectProperty = $this->reflection->getProperty('redirectTo');
-        $redirect = $redirectProperty->getValue($this->view);
+        $redirect = $this->view->getRedirectTo();
 
         $this->assertSame('Location: /index.php?page=login', $redirect);
     }

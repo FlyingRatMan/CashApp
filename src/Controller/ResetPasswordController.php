@@ -24,10 +24,10 @@ class ResetPasswordController
     {
         $token = hex2bin($_GET['token']);
         $isValidToken = $this->tokenValidation($token);
-        $isValidUser = $this->userRepository->getUserByEmail(hex2bin($token));
+        $isValidUser = $this->userRepository->getUserByEmail($token);
 
-        if ($isValidToken && $isValidUser) {
-            $this->view->setTemplate('resetPassword.twig');
+        if (!$isValidToken || !$isValidUser) {
+            $this->view->setRedirect('/index.php?page=forgotPassword'); // should be probably error page
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -40,6 +40,8 @@ class ResetPasswordController
 
             $this->view->addParameter('error', $passwordErr);
         }
+
+        $this->view->setTemplate('resetPassword.twig');
     }
 
     public function tokenValidation(string $email): bool
@@ -50,9 +52,9 @@ class ResetPasswordController
 
         if ($data) {
             $expiry = $data[0]['expires_at'];
-            $now = date('Y-m-d h:i:s');
+            $now = date('Y-m-d H:i:s');
 
-            if ($expiry < $now) {
+            if (new \DateTime($expiry) > new \DateTime($now)) {
                 return true;
             }
         }

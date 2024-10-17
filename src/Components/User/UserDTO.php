@@ -1,9 +1,9 @@
 <?php
-/*declare(strict_types=1);
+declare(strict_types=1);
 
-namespace App\Model\User;
+namespace App\Components\User;
 
-readonly class UserDTO
+class UserDTO
 {
     public function __construct(
         public int    $id,
@@ -11,4 +11,4 @@ readonly class UserDTO
         public string $email,
         public string $password
     ) {}
-}*/
+}
