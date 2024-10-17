@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Components\UserLogin\Communication;
 
-use App\Components\User\Business\UserBusinessFacade;
+use App\Components\UserLogin\Business\UserLoginFacade;
 use App\Core\View;
 use App\Service\UserValidatorInterface;
 
@@ -11,14 +11,14 @@ class UserLoginController
 {
     public function __construct(
         private View                   $view,
-        private UserBusinessFacade     $userFacade,
+        private UserLoginFacade        $userLoginFacade,
         private UserValidatorInterface $userValidator,
     ) {}
 
     public function index(): void
     {
         if (isset($_POST['login'])) {
-            $user = $this->userFacade->getUserByEmail($_POST['email']);
+            $user = $this->userLoginFacade->getUserByEmail($_POST['email']);
 
             if (!empty($user)) {
                 $validUser = $this->userValidator->isValidCredentials($_POST['password'], $user->password);
