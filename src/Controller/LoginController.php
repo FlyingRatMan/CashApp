@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+/*declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -44,4 +44,4 @@ readonly class LoginController
 
         $this->view->setTemplate('login.twig');
     }
-}
+}*/

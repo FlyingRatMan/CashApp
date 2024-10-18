@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+/*declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -57,4 +57,4 @@ readonly class RegistrationController
         $this->view->addParameter('userEmail', $_SESSION['regEmail'] ?? null);
         $this->view->addParameter('errors', $_SESSION['userErr'] ?? null);
     }
-}
+}*/

@@ -5,36 +5,18 @@ namespace App\Components\UserLogin\Communication;
 
 use App\Components\UserLogin\Business\UserLoginFacade;
 use App\Core\View;
-use App\Service\UserValidatorInterface;
 
 class UserLoginController
 {
     public function __construct(
-        private View                   $view,
-        private UserLoginFacade        $userLoginFacade,
-        private UserValidatorInterface $userValidator,
+        private View            $view,
+        private UserLoginFacade $userLoginFacade,
     ) {}
 
     public function index(): void
     {
         if (isset($_POST['login'])) {
-            $user = $this->userLoginFacade->getUserByEmail($_POST['email']);
-
-            if (!empty($user)) {
-                $validUser = $this->userValidator->isValidCredentials($_POST['password'], $user->password);
-
-                if ($validUser) {
-                    $_SESSION['loggedUser'] = $user->name;
-                    $_SESSION['loggedUserId'] = $user->id;
-
-                    $this->view->setRedirect('/');
-                    return;
-                }
-            }
-
-            $err = 'Wrong user credentials.';
-
-            $this->view->addParameter('err', $err);
+            $this->userLoginFacade->login($_POST['email'], $_POST['password']);
         }
 
         if (isset($_POST['reset'])) {

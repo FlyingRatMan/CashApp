@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+/*declare(strict_types=1);
 
 namespace App\Service;
 
@@ -30,4 +30,4 @@ class UserValidator implements UserValidatorInterface
     {
         return password_verify($password, $savedPassword);
     }
-}
+}*/

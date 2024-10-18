@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Components\User\Persistence;
+namespace App\Components\User\Persistence\Mapper;
 
-use App\Components\User\UserDTO;
+use App\DataTransferObjects\UserDTO;
 
 class UserMapper
 {

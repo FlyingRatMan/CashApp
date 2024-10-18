@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Components\User\Persistence;
 
-use App\Components\User\UserDTO;
+use App\DataTransferObjects\UserDTO;
 use App\Model\DB\SqlConnector;
 
 class UserEntityManager
@@ -12,7 +12,7 @@ class UserEntityManager
         private SqlConnector $sqlConnector,
     ) {}
 
-    public function save(UserDTO $userDTO): void
+    public function save(UserDTO $userDTO): bool
     {
         $db = $this->sqlConnector::getConnection();
         $query = "INSERT INTO Users (name, email, password) VALUES (:name, :email, :password)";
@@ -23,10 +23,10 @@ class UserEntityManager
             ':password' => $userDTO->password,
         ];
 
-        $db->insert($query, $params);
+        return $db->insert($query, $params);
     }
 
-    public function updatePassword(UserDTO $userDTO, string $password): void
+    public function updatePassword(UserDTO $userDTO, string $password): bool
     {
         $db = $this->sqlConnector::getConnection();
         $query = "UPDATE Users SET name = :name, email = :email, password = :password WHERE id = :id";
@@ -38,6 +38,6 @@ class UserEntityManager
             ':id' => $userDTO->id,
         ];
 
-        $db->update($query, $params);
+        return $db->update($query, $params);
     }
 }

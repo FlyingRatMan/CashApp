@@ -1,11 +1,13 @@
 <?php
-/*declare(strict_types=1);
+declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Components\Account;
 
-class AccountValidator implements AccountValidatorInterface
+use Error;
+
+class AccountValidation
 {
-    public function limit(array $data, int $amount): string
+    public function limit(array $data, int $amount): ?Error
     {
         $dailyLimit = 0;
         $hourlyLimit = 0;
@@ -26,25 +28,25 @@ class AccountValidator implements AccountValidatorInterface
         $dailyLimit += $amount;
 
         if ($dailyLimit > 500) {
-            return 'Daily limit of 500 is exceeded.';
+            return new Error('Daily limit of 500 is exceeded.');
         }
         if ( $hourlyLimit > 100) {
-            return 'Hourly limit of 100 is exceeded.';
+            return new Error('Hourly limit of 100 is exceeded.');
         }
 
-        return '';
+        return null;
     }
 
-    public function isValidAmount(string $amount): string
+    public function isValidAmount(string $amount): ?Error
     {
         $amount = $this->transform($amount);
         $arr = explode(".", $amount);
 
         if ((count($arr) > 1) && (strlen($arr[1]) > 2)) {
-            return "Only two decimals are allowed";
+            return new Error("Only two decimals are allowed");
         }
 
-        return '';
+        return null;
     }
 
     private function sanitize(string $input): string
@@ -60,4 +62,4 @@ class AccountValidator implements AccountValidatorInterface
         $sanitizedInput = $this->sanitize($input);
         return str_replace([".", ","], ["", "."], $sanitizedInput);
     }
-}*/
+}

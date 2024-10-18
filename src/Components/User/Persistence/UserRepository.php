@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace App\Components\User\Persistence;
 
-use App\Components\User\UserDTO;
+use App\Components\User\Persistence\Mapper\UserMapper;
+use App\DataTransferObjects\UserDTO;
 use App\Model\DB\SqlConnector;
 
 class UserRepository

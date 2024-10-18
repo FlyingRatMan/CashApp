@@ -5,12 +5,12 @@ namespace App\Components\User\Business;
 
 use App\Components\User\Persistence\UserEntityManager;
 use App\Components\User\Persistence\UserRepository;
-use App\Components\User\UserDTO;
+use App\DataTransferObjects\UserDTO;
 
 class UserBusinessFacade
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private UserRepository    $userRepository,
         private UserEntityManager $userEntityManager
     ) {}
 
@@ -28,4 +28,8 @@ class UserBusinessFacade
     {
         $this->userEntityManager->updatePassword($userDTO, $newPassword);
     }
+
+    // todo VALIDATION (validation should be done in business)
+
+
 }

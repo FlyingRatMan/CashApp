@@ -3,20 +3,21 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Components\Account\AccountValidation;
 use App\Core\View;
 use App\Model\Account\AccountEntityManager;
 use App\Model\Account\AccountMapper;
 use App\Model\Account\AccountRepository;
-use App\Service\AccountValidatorInterface;
+
 
 readonly class HomeController
 {
     public function __construct(
-        private View                      $view,
-        private AccountEntityManager      $accountEntityManager,
-        private AccountRepository         $accountRepository,
-        private AccountValidatorInterface $accountValidator,
-        private AccountMapper             $accountMapper,
+        private View                 $view,
+        private AccountEntityManager $accountEntityManager,
+        private AccountRepository    $accountRepository,
+        private AccountValidation    $accountValidator,
+        private AccountMapper        $accountMapper,
     ) {}
 
     public function index(): void

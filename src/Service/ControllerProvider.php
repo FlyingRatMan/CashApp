@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Components\UserForgetPassword\Communication\UserForgetPasswordController;
 use App\Components\UserLogin\Communication\UserLoginController;
-use App\Controller\ForgotPasswordController;
+use App\Components\UserRegister\Communication\UserRegisterController;
 use App\Controller\HomeController;
 use App\Controller\LogoutController;
 use App\Controller\ResetPasswordController;
-use App\Controller\RegistrationController;
 
 class ControllerProvider
 {
@@ -17,10 +17,10 @@ class ControllerProvider
         return [
             'home' => HomeController::class,
             'login' => UserLoginController::class,
-            'register' => RegistrationController::class,
+            'register' => UserRegisterController::class,
             'logout' => LogoutController::class,
             'resetPassword' => ResetPasswordController::class,
-            'forgotPassword' => ForgotPasswordController::class,
+            'forgotPassword' => UserForgetPasswordController::class,
         ];
     }
 }
