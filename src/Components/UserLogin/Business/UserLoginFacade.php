@@ -9,8 +9,8 @@ use App\Core\View;
 class UserLoginFacade
 {
     public function __construct(
-        private View $view,
-        private UserValidation     $userValidation
+        private View           $view,
+        private UserValidation $userValidation
     ) {}
 
     public function login(string $email, string $password): void

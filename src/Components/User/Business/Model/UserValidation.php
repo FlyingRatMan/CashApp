@@ -47,7 +47,10 @@ class UserValidation
         $hasErrors = $emailError !== null || $passwordError !== null;
 
         if ($userExist || $hasErrors) {
-            return [$emailError, $passwordError];
+            $errors = [];
+            if ($emailError) {$errors['email'] = $emailError->getMessage();}
+            if ($passwordError) {$errors['password'] = $passwordError->getMessage();}
+            return $errors;
         }
 
         return null;

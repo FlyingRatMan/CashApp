@@ -1,9 +1,9 @@
 <?php
-/*declare(strict_types=1);
+declare(strict_types=1);
 
-namespace Unit\Model\Mapper;
+namespace Unit\Components\User;
 
-use App\Model\User\UserMapper;
+use App\Components\User\Persistence\Mapper\UserMapper;
 use PHPUnit\Framework\TestCase;
 
 class UserMapperTest extends TestCase
@@ -24,4 +24,4 @@ class UserMapperTest extends TestCase
         $this->assertSame($expectedUser['email'], $actualUserDTO->email);
         $this->assertSame($expectedUser['password'], $actualUserDTO->password);
     }
-}*/
+}

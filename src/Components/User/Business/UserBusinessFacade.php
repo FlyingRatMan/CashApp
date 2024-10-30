@@ -19,17 +19,13 @@ class UserBusinessFacade
         return $this->userRepository->getUserByEmail($email);
     }
 
-    public function save(UserDTO $userDTO): void
+    public function save(UserDTO $userDTO): bool
     {
-        $this->userEntityManager->save($userDTO);
+        return $this->userEntityManager->save($userDTO);
     }
 
-    public function updatePassword(UserDTO $userDTO, string $newPassword): void
+    public function updatePassword(UserDTO $userDTO, string $newPassword): bool
     {
-        $this->userEntityManager->updatePassword($userDTO, $newPassword);
+        return $this->userEntityManager->updatePassword($userDTO, $newPassword);
     }
-
-    // todo VALIDATION (validation should be done in business)
-
-
 }

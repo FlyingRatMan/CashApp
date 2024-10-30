@@ -9,7 +9,7 @@ class View implements ViewInterface
 {
     protected array $parameters = [];
     protected string $template;
-    private string $redirectTo = "";
+    private string $redirectTo;
 
     public function __construct(
         private readonly Environment $twig,

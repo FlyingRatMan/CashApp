@@ -6,34 +6,33 @@
 </head>
 <body>
 
-    <form method="POST">
-        <label for="name"> Name:
-            <input required
-                   type="text"
-                   name="name"
-                   value="{{ errors ? userName : '' }}">
-        </label>
-        <label for="email"> E-Mail:
-            <input required
-                   type="email"
-                   name="email"
-                   value="{{ errors ? userEmail : '' }}">
-        </label>
-        <label for="password"> Password:
-            <input required
-                   type="password"
-                   name="password">
-        </label>
-        <p>
-            {{ errors.emailErr ~ errors.passErr }}
-            {% if errors.userExist %}
-                <p>User with such email already exist.</p>
-            {% endif %}
-        </p>
+<form method="POST">
+    <label for="name"> Name:
+        <input required
+               type="text"
+               name="name"
+               value="{{ errors ? userName : '' }}">
+    </label>
+    <label for="email"> E-Mail:
+        <input required
+               type="email"
+               name="email"
+               value="{{ errors ? userEmail : '' }}">
+    </label>
+    <label for="password"> Password:
+        <input required
+               type="password"
+               name="password">
+    </label>
+    {% if errors is not empty %}
+        {% for error in errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    {% endif %}
 
-        <button type="submit" name="user">Sign up!</button>
-        <a href="http://localhost:8080/index.php?page=login">Have an account already? Login here.</a>
-    </form>
+    <button type="submit" name="user">Sign up!</button>
+    <a href="http://localhost:8080/index.php?page=login">Have an account already? Login here.</a>
+</form>
 
 </body>
 </html>

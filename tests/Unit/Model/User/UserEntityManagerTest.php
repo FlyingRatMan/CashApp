@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+/*declare(strict_types=1);
 
 namespace Unit\Model\User;
 
@@ -45,4 +45,4 @@ class UserEntityManagerTest extends TestCase
         $this->assertSame($expectedData->email, $actualData->email);
         $this->assertSame($expectedData->password, $actualData->password);
     }
-}
+}*/

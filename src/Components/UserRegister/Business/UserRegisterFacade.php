@@ -21,9 +21,9 @@ class UserRegisterFacade
 
     public function register(UserDTO $userDTO): void
     {
-        try {
-            $this->validation->validateCredentials($userDTO->email, $userDTO->password);
+        $error = $this->validation->validateCredentials($userDTO->email, $userDTO->password);
 
+        if ($error === null) {
             $userDTO = $this->userMapper->createUserDTO([
                 'id' => 1,
                 'name' => $userDTO->name,
@@ -35,11 +35,10 @@ class UserRegisterFacade
 
             $this->view->setRedirect('/index.php?page=login');
             return;
-
-        } catch (Error $e) {
-            $this->view->addParameter('userName', $userDTO->name);
-            $this->view->addParameter('userEmail', $userDTO->email);
-            $this->view->addParameter('errors', $e->getMessage());
         }
+
+        $this->view->addParameter('userName', $userDTO->name);
+        $this->view->addParameter('userEmail', $userDTO->email);
+        $this->view->addParameter('errors', $error);
     }
 }
