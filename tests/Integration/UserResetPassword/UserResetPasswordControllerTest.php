@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Unit\Components\UserResetPassword;
+namespace Integration\UserResetPassword;
 
 use App\Components\Token\Business\Model\TokenValidation;
 use App\Components\User\Business\Model\UserValidation;
@@ -19,7 +19,7 @@ use Twig\Loader\FilesystemLoader;
 
 class UserResetPasswordControllerTest extends TestCase
 {
-    private View $view;
+    private UserRepository $userRepository;
     private UserResetPasswordController $controller;
 
     protected function setUp(): void
@@ -27,25 +27,26 @@ class UserResetPasswordControllerTest extends TestCase
         $loader = new FilesystemLoader('/home/olhapurtova/PhpstormProjects/CashApp/src/View/templates');
         $twig = new Environment($loader);
 
-        $this->view = new View($twig);
+        $view = new View($twig);
         $sqlConnector = new SqlConnector();
         $userMapper = new UserMapper();
-        $userRepository = new UserRepository($userMapper, $sqlConnector);
-        $userManager = new UserEntityManager($sqlConnector);
-        $userFacade = new UserBusinessFacade($userRepository, $userManager);
-        $tokenValidation = new TokenValidation($sqlConnector);
+        $this->userRepository = new UserRepository($userMapper, $sqlConnector);
+        $userEntityManager = new UserEntityManager($sqlConnector);
+        $userFacade = new UserBusinessFacade($this->userRepository, $userEntityManager);
         $userValidation = new UserValidation($userFacade);
-        $userResetPasswordFacade = new UserResetPasswordFacade($this->view, $userFacade, $tokenValidation, $userValidation, $userMapper);
-        $this->controller = new UserResetPasswordController($this->view, $userResetPasswordFacade);
+        $tokenValidation = new TokenValidation($sqlConnector);
+        $userResetPasswordFacade = new UserResetPasswordFacade($view, $userFacade, $tokenValidation, $userValidation, $userMapper);
+        $this->controller = new UserResetPasswordController($view, $userResetPasswordFacade);
     }
 
-    public function testIndexSetsTemplate(): void
+    public function testIndexCallsUpdatePassword(): void
     {
-        $_SERVER['REQUEST_METHOD'] = false;
+        $_POST['password'] = 'new12QWqw,.';
+        $_GET['token'] = bin2hex('update@example.com');
 
         $this->controller->index();
-        $template = $this->view->getTemplate();
+        $actual = $this->userRepository->getUserByEmail('update@example.com');
 
-        $this->assertSame('resetPassword.twig', $template);
+        $this->assertTrue(password_verify('new12QWqw,.', $actual->password));
     }
 }

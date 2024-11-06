@@ -34,7 +34,7 @@ class UserEntityManager
         $params = [
             ':name' => $userDTO->name,
             ':email' => $userDTO->email,
-            ':password' => $password,
+            ':password' => password_hash($password, PASSWORD_DEFAULT),
             ':id' => $userDTO->id,
         ];
 

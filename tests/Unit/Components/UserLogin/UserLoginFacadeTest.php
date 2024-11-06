@@ -10,6 +10,7 @@ use App\Components\User\Persistence\UserEntityManager;
 use App\Components\User\Persistence\UserRepository;
 use App\Components\UserLogin\Business\UserLoginFacade;
 use App\Core\View;
+use App\db_script;
 use App\Model\DB\SqlConnector;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
@@ -17,10 +18,9 @@ use Twig\Loader\FilesystemLoader;
 
 class UserLoginFacadeTest extends TestCase
 {
-    private UserEntityManager $userEntityManager;
     private UserLoginFacade $userLoginFacade;
-    private UserMapper $userMapper;
     private View $view;
+    private db_script $db_script;
 
     protected function setUp(): void
     {
@@ -30,13 +30,16 @@ class UserLoginFacadeTest extends TestCase
         $twig = new Environment($loader);
 
         $this->view = new View($twig);
-        $this->userMapper = new UserMapper();
+        $userMapper = new UserMapper();
         $sqlConnector = new SqlConnector();
-        $userRepository = new UserRepository($this->userMapper, $sqlConnector);
-        $this->userEntityManager = new UserEntityManager($sqlConnector);
-        $userFacade = new UserBusinessFacade($userRepository, $this->userEntityManager);
+        $userRepository = new UserRepository($userMapper, $sqlConnector);
+        $userEntityManager = new UserEntityManager($sqlConnector);
+        $userFacade = new UserBusinessFacade($userRepository, $userEntityManager);
         $userValidation = new UserValidation($userFacade);
         $this->userLoginFacade = new UserLoginFacade($this->view, $userValidation);
+
+        $this->db_script = new db_script();
+        $this->db_script->prefillDatabase();
     }
 
     public function testLoginInvalid(): void
@@ -53,11 +56,8 @@ class UserLoginFacadeTest extends TestCase
 
     public function testLoginValid(): void
     {
-        $email = 'test@test.com';
-        $password = 'test';
-        $user = $this->userMapper->createUserDTO(['id'=>1, 'name'=>'test', 'email'=>'test@test.com', 'password'=>password_hash('test', PASSWORD_DEFAULT)]);
-
-        $this->userEntityManager->save($user);
+        $email = 'erika@example.com';
+        $password = '12QWqw,.';
 
         $this->userLoginFacade->login($email, $password);
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Unit\Components\UserForgetPassword;
+namespace Integration\UserForgetPassword;
 
 use App\Components\Mailer\Business\MailerFacade;
 use App\Components\Token\Business\TokenFacade;
@@ -13,16 +13,27 @@ use App\Components\User\Persistence\Mapper\UserMapper;
 use App\Components\User\Persistence\UserEntityManager;
 use App\Components\User\Persistence\UserRepository;
 use App\Components\UserForgetPassword\Business\UserForgetPasswordFacade;
+use App\Components\UserForgetPassword\Communication\UserForgetPasswordController;
+use App\Core\View;
+use App\db_script;
 use App\Model\DB\SqlConnector;
 use PHPUnit\Framework\TestCase;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
-class UserForgetPasswordFacadeTest extends TestCase
+class UserForgetPasswordControllerTest extends TestCase
 {
-    private UserForgetPasswordFacade $facade;
+    private View $view;
     private TokenRepository $tokenRepository;
+    private UserForgetPasswordController $controller;
+    private db_script $db_script;
 
     protected function setUp(): void
     {
+        $loader = new FilesystemLoader('/home/olhapurtova/PhpstormProjects/CashApp/src/View/templates');
+        $twig = new Environment($loader);
+
+        $this->view = new View($twig);
         $sqlConnector = new SqlConnector();
         $userMapper = new UserMapper();
         $userRepository = new UserRepository($userMapper, $sqlConnector);
@@ -33,32 +44,42 @@ class UserForgetPasswordFacadeTest extends TestCase
         $this->tokenRepository = new TokenRepository($sqlConnector, $tokenMapper);
         $tokenEntityManager = new TokenEntityManager($sqlConnector);
         $tokenFacade = new TokenFacade($this->tokenRepository, $tokenEntityManager, $tokenMapper);
-
-        $this->facade = new UserForgetPasswordFacade(
+        $userForgetPasswordFacade = new UserForgetPasswordFacade(
             $userBusinessFacade,
             $mailerFacadeMock,
             $tokenFacade
         );
+        $this->controller = new UserForgetPasswordController($this->view, $userForgetPasswordFacade);
+
+        $this->db_script = new db_script();
+        $this->db_script->prefillDatabase();
     }
 
-    public function testSaveTokenSavesNewToken(): void
+    protected function tearDown(): void
     {
-        $email = 'new@example.com';
+        $this->db_script->cleanDatabase();
 
-        $this->facade->saveToken($email);
-        $actual = $this->tokenRepository->getTokenByEmail($email);
-
-        $this->assertSame($email, $actual->email);
+        parent::tearDown();
     }
 
-    public function testSaveTokenUpdatesToken(): void
+    public function testIndexCallsSendEmail(): void
     {
-        $email = 'update@example.com';
-        $date = date('Y-m-d H:i:s', time() + 120 * 60);
+        $_POST['sendEmail'] = true;
+        $_POST['email'] = 'update@example.com';
 
-        $this->facade->saveToken($email);
-        $actual = $this->tokenRepository->getTokenByEmail($email);
+        $this->controller->index();
+        $actual = $this->tokenRepository->getTokenByEmail('update@example.com');
 
-        $this->assertSame($date, $actual->expires_at);
+        $this->assertSame('update@example.com', $actual->email);
+    }
+
+    public function testIndexSetsTemplate(): void
+    {
+        $_POST['sendEmail'] = false;
+
+        $this->controller->index();
+        $template = $this->view->getTemplate();
+
+        $this->assertSame('forgotPassword.twig', $template);
     }
 }

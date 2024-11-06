@@ -9,12 +9,16 @@ use App\Core\View;
 class UserResetPasswordController
 {
     public function __construct(
-        private View $view,
+        private View                    $view,
         private UserResetPasswordFacade $userResetPasswordFacade
     ) {}
 
     public function index(): void
     {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->userResetPasswordFacade->resetPassword($_GET['token'], $_POST['password']);
+        }
 
+        $this->view->setTemplate('resetPassword.twig');
     }
 }

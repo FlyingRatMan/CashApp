@@ -9,7 +9,7 @@ use App\Core\View;
 class UserForgetPasswordController
 {
     public function __construct(
-        private View $view,
+        private View                     $view,
         private UserForgetPasswordFacade $userForgetPasswordFacade
     ) {}
 

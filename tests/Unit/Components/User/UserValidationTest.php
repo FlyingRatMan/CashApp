@@ -8,34 +8,33 @@ use App\Components\User\Business\UserBusinessFacade;
 use App\Components\User\Persistence\Mapper\UserMapper;
 use App\Components\User\Persistence\UserEntityManager;
 use App\Components\User\Persistence\UserRepository;
+use App\db_script;
 use App\Model\DB\SqlConnector;
 use PHPUnit\Framework\TestCase;
 
 class UserValidationTest extends TestCase
 {
     private UserValidation $validator;
-    private SqlConnector $sqlConnector;
+    private db_script $db_script;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $userMapper = new UserMapper();
-        $this->sqlConnector = new SqlConnector();
-        $userRepository = new UserRepository($userMapper, $this->sqlConnector);
-        $userEntityManager = new UserEntityManager($this->sqlConnector);
+        $sqlConnector = new SqlConnector();
+        $userRepository = new UserRepository($userMapper, $sqlConnector);
+        $userEntityManager = new UserEntityManager($sqlConnector);
         $userBusinessFacade = new UserBusinessFacade($userRepository, $userEntityManager);
         $this->validator = new UserValidation($userBusinessFacade);
 
-        $this->sqlConnector->insert("INSERT INTO Users (name, email, password) VALUES (:name, :email, :password)",
-            [':name' => 'test', ':email' => 'existing@test.com', ':password' => password_hash('12QWqw,.', PASSWORD_DEFAULT)]);
+        $this->db_script = new db_script();
+        $this->db_script->prefillDatabase();
     }
 
     protected function tearDown(): void
     {
-        $this->sqlConnector->insert("SET FOREIGN_KEY_CHECKS=0", []);
-        $this->sqlConnector->insert("TRUNCATE TABLE Users", []);
-        $this->sqlConnector->insert("SET FOREIGN_KEY_CHECKS=1", []);
+        $this->db_script->cleanDatabase();
 
         parent::tearDown();
     }
@@ -62,7 +61,7 @@ class UserValidationTest extends TestCase
 
     public function testValidateEmailValid(): void
     {
-        $email = 'test@test.com';
+        $email = 'valid@email.com';
 
         $result = $this->validator->validateEmail($email);
 
@@ -99,7 +98,8 @@ class UserValidationTest extends TestCase
 
     public function testValidateCredentialsValid(): void
     {
-        $email = 'newUser@test.com';
+        // registration
+        $email = 'testValidate@credentials.valid';
         $password = '12QWqw,.';
 
         $result = $this->validator->validateCredentials($email, $password);
@@ -122,18 +122,19 @@ class UserValidationTest extends TestCase
 
     public function testValidateUserValid(): void
     {
-        $email = 'existing@test.com';
+        // login
+        $email = 'erika@example.com';
         $password = '12QWqw,.';
 
         $result = $this->validator->validateUser($email, $password);
 
         $this->assertIsObject($result);
-        $this->assertSame('existing@test.com', $result->email);
+        $this->assertSame('erika@example.com', $result->email);
     }
 
     public function testValidateUserInvalid(): void
     {
-        $email = 'existingUser@test.com';
+        $email = 'erika@example.com';
         $password = 'invalid';
 
         $result = $this->validator->validateUser($email, $password);

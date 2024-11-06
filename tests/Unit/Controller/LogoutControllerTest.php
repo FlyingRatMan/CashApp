@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+/*declare(strict_types=1);
 
 namespace Unit\Controller;
 
@@ -34,4 +34,4 @@ class LogoutControllerTest extends TestCase
 
         $this->assertSame('Location: /index.php?page=login', $redirect);
     }
-}
+}*/

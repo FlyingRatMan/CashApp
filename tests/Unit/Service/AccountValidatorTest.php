@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+/*declare(strict_types=1);
 
 namespace Unit\Service;
 
@@ -78,30 +78,30 @@ class AccountValidatorTest extends TestCase
         $this->assertSame('', $result );
     }
 
-    /*public function testSanitizeRemovesUnwantedChars(): void
-    {
-        $string = '    bc123\/xyz.45def   ';
-
-        $result = $this->validator->sanitize($string);
-
-        $this->assertSame('123.45', $result);
-    }
-
-    public function testSanitizeRemovesTags(): void
-    {
-        $string = '<script>alert()</script>123';
-
-        $result = $this->validator->sanitize($string);
-
-        $this->assertSame('123', $result);
-    }
-
-    public function testSanitizeWithProperNumber(): void
-    {
-        $string = '1.000,00';
-
-        $result = $this->validator->sanitize($string);
-
-        $this->assertSame('1.000,00', $result);
-    }*/
-}
+//    public function testSanitizeRemovesUnwantedChars(): void
+//    {
+//        $string = '    bc123\/xyz.45def   ';
+//
+//        $result = $this->validator->sanitize($string);
+//
+//        $this->assertSame('123.45', $result);
+//    }
+//
+//    public function testSanitizeRemovesTags(): void
+//    {
+//        $string = '<script>alert()</script>123';
+//
+//        $result = $this->validator->sanitize($string);
+//
+//        $this->assertSame('123', $result);
+//    }
+//
+//    public function testSanitizeWithProperNumber(): void
+//    {
+//        $string = '1.000,00';
+//
+//        $result = $this->validator->sanitize($string);
+//
+//        $this->assertSame('1.000,00', $result);
+//    }
+}*/

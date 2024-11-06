@@ -19,9 +19,6 @@ use Twig\Loader\FilesystemLoader;
 class UserLoginControllerTest extends TestCase
 {
     private View $view;
-    private UserMapper $userMapper;
-    private SqlConnector $sqlConnector;
-    private UserEntityManager $userEntityManager;
     private UserLoginController $loginController;
 
     public function setUp(): void
@@ -34,23 +31,14 @@ class UserLoginControllerTest extends TestCase
         $twig = new Environment($loader);
 
         $this->view = new View($twig);
-        $this->sqlConnector = new SqlConnector();
-        $this->userMapper = new UserMapper();
-        $userRepository = new UserRepository($this->userMapper, $this->sqlConnector);
-        $this->userEntityManager = new UserEntityManager($this->sqlConnector);
-        $userFacade = new UserBusinessFacade($userRepository, $this->userEntityManager);
+        $sqlConnector = new SqlConnector();
+        $userMapper = new UserMapper();
+        $userRepository = new UserRepository($userMapper, $sqlConnector);
+        $userEntityManager = new UserEntityManager($sqlConnector);
+        $userFacade = new UserBusinessFacade($userRepository, $userEntityManager);
         $userValidation = new UserValidation($userFacade);
         $loginFacade = new UserLoginFacade($this->view, $userValidation);
         $this->loginController = new UserLoginController($this->view, $loginFacade);
-    }
-
-    protected function tearDown(): void
-    {
-        $this->sqlConnector->insert("SET FOREIGN_KEY_CHECKS=0", []);
-        $this->sqlConnector->insert("TRUNCATE TABLE Users", []);
-        $this->sqlConnector->insert("SET FOREIGN_KEY_CHECKS=1", []);
-
-        parent::tearDown();
     }
 
     public function testIndexOnResetPassword(): void

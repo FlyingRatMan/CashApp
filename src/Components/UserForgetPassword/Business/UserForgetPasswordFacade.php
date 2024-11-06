@@ -21,31 +21,40 @@ class UserForgetPasswordFacade
 
         if ($user !== null) {
             $this->mailerFacade->sendEmail($email);
+            $this->saveToken($email);
         }
 
-        $this->saveToken($email);
+        // echo 'Wrong user.';
     }
 
     public function saveToken(string $email): void
     {
         $token = bin2hex($email);
-        $tokenDTO = $this->tokenFacade->createTokenDTO(
-            [
-                'id' => 1,
-                'token' => $token,
-                'email' => $email,
-                'expires_at' => date('Y-m-d H:i:s', time() + 120 * 60)
-            ]
-        );
         $existingToken = $this->tokenFacade->getTokenByEmail($email);
 
         if ($existingToken !== null) {
-            echo 'update';
+            // echo 'update';
+            $tokenDTO = $this->tokenFacade->createTokenDTO(
+                [
+                    'id' => $existingToken->id,
+                    'token' => $token,
+                    'email' => $email,
+                    'expires_at' => date('Y-m-d H:i:s', time() + 120 * 60)
+                ]
+            );
             $this->tokenFacade->updateToken($tokenDTO);
         }
 
         if ($existingToken === null) {
-            echo 'save';
+            // echo 'save';
+            $tokenDTO = $this->tokenFacade->createTokenDTO(
+                [
+                    'id' => 1,
+                    'token' => $token,
+                    'email' => $email,
+                    'expires_at' => date('Y-m-d H:i:s', time() + 120 * 60)
+                ]
+            );
             $this->tokenFacade->saveToken($tokenDTO);
         }
     }
