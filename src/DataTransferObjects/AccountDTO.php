@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\Account;
+namespace App\DataTransferObjects;
 
-readonly class AccountDTO
+class AccountDTO
 {
     public function __construct(
         public int    $id,

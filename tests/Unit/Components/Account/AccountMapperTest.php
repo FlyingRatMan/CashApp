@@ -1,9 +1,9 @@
 <?php
-/*declare(strict_types=1);
+declare(strict_types=1);
 
-namespace Unit\Model\Mapper;
+namespace Unit\Components\Account;
 
-use App\Model\Account\AccountMapper;
+use App\Components\Account\Persistence\Mapper\AccountMapper;
 use PHPUnit\Framework\TestCase;
 
 class AccountMapperTest extends TestCase
@@ -14,7 +14,7 @@ class AccountMapperTest extends TestCase
         $expectedTransaction = [
             'id' => 1,
             'user_id' => 1,
-            'amount' => (float)10,
+            'amount' => 10.0,
             'date' => '2024-08-22 10:29:56',
         ];
 
@@ -23,4 +23,4 @@ class AccountMapperTest extends TestCase
         $this->assertSame($expectedTransaction['amount'], $actualAccountDTO->amount);
         $this->assertSame($expectedTransaction['date'], $actualAccountDTO->date);
     }
-}*/
+}

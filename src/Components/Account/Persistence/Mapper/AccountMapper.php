@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\Account;
+namespace App\Components\Account\Persistence\Mapper;
+
+use App\DataTransferObjects\AccountDTO;
 
 class AccountMapper
 {
