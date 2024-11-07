@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Components\UserForgetPassword\Business;
 
 use App\Components\Mailer\Business\MailerFacade;
+use App\Components\Mailer\Mapper\MailerMapper;
 use App\Components\Token\Business\TokenFacade;
 use App\Components\User\Business\UserBusinessFacade;
 
@@ -13,6 +14,7 @@ class UserForgetPasswordFacade
         private UserBusinessFacade $userFacade,
         private MailerFacade       $mailerFacade,
         private TokenFacade        $tokenFacade,
+        private MailerMapper       $mailerMapper
     ) {}
 
     public function sendEmail(string $email): void
@@ -20,11 +22,23 @@ class UserForgetPasswordFacade
         $user = $this->userFacade->getUserByEmail($email);
 
         if ($user !== null) {
-            $this->mailerFacade->sendEmail($email);
-            $this->saveToken($email);
-        }
+            $resetLink = 'http://localhost:8080/index.php?page=resetPassword&token=' . bin2hex($email);
 
-        // echo 'Wrong user.';
+            $mailDTO = $this->mailerMapper->createMailDTO([
+                    'from' => 'cash@cash.de',
+                    'to' => $email,
+                    'subject' => 'Reset Password',
+                    'html' => '
+                    <a href="' . $resetLink . '">Click here to reset password</a>
+                    '
+                ]
+            );
+
+            $this->mailerFacade->sendEmail($mailDTO);
+            $this->saveToken($email);
+
+            echo 'Password reset link was sent to your email :)';
+        }
     }
 
     public function saveToken(string $email): void

@@ -1,14 +1,14 @@
 <?php
-/*declare(strict_types=1);
+declare(strict_types=1);
 
 namespace Unit\Service;
 
-use App\Controller\ForgotPasswordController;
-use App\Controller\HomeController;
-use App\Controller\LoginController;
+use App\Components\Account\Communication\AccountController;
+use App\Components\UserForgetPassword\Communication\UserForgetPasswordController;
+use App\Components\UserLogin\Communication\UserLoginController;
+use App\Components\UserRegister\Communication\UserRegisterController;
+use App\Components\UserResetPassword\Communication\UserResetPasswordController;
 use App\Controller\LogoutController;
-use App\Controller\RegistrationController;
-use App\Controller\ResetPasswordController;
 use App\Service\ControllerProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -24,16 +24,16 @@ class ControllerProviderTest extends TestCase
     public function testGetListReturnsCorrectControllers(): void
     {
         $expected = [
-            'home' => HomeController::class,
-            'login' => LoginController::class,
-            'register' => RegistrationController::class,
+            'home' => AccountController::class,
+            'login' => UserLoginController::class,
+            'register' => UserRegisterController::class,
             'logout' => LogoutController::class,
-            'resetPassword' => ResetPasswordController::class,
-            'forgotPassword' => ForgotPasswordController::class,
+            'resetPassword' => UserResetPasswordController::class,
+            'forgotPassword' => UserForgetPasswordController::class,
         ];
 
         $actual = $this->controllerProvider->getList();
 
         $this->assertSame($expected, $actual);
     }
-}*/
+}

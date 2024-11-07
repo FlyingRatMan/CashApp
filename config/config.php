@@ -1,6 +1,10 @@
 <?php
 declare(strict_types=1);
 
+use App\Components\Account\Communication\AccountController;
+use App\Components\Account\Persistence\AccountEntityManager;
+use App\Components\Account\Persistence\AccountRepository;
+use App\Components\Account\Persistence\Mapper\AccountMapper;
 use App\Components\Token\Persistence\Mapper\TokenMapper;
 use App\Components\Token\Persistence\TokenEntityManager;
 use App\Components\Token\Persistence\TokenRepository;
@@ -11,14 +15,10 @@ use App\Components\UserForgetPassword\Business\UserForgetPasswordFacade;
 use App\Components\UserForgetPassword\Communication\UserForgetPasswordController;
 use App\Components\UserLogin\Communication\UserLoginController;
 use App\Components\UserRegister\Communication\UserRegisterController;
+use App\Components\UserResetPassword\Communication\UserResetPasswordController;
 
-use App\Controller\HomeController;
 use App\Controller\LogoutController;
-use App\Controller\ResetPasswordController;
 use App\Core\View;
-use App\Model\Account\AccountEntityManager;
-use App\Model\Account\AccountMapper;
-use App\Model\Account\AccountRepository;
 use App\Model\DB\SqlConnector;
 use App\Service\ControllerProvider;
 use Twig\Environment;
@@ -53,10 +53,10 @@ return [
     UserForgetPasswordFacade::class => \DI\autowire(),
 
     ControllerProvider::class => \DI\autowire(),
-    HomeController::class => \DI\autowire(),
+    AccountController::class => \DI\autowire(),
     UserRegisterController::class => \DI\autowire(),
     UserLoginController::class => \DI\autowire(),
     LogoutController::class => \DI\autowire(),
-    ResetPasswordController::class => \DI\autowire(),
+    UserResetPasswordController::class => \DI\autowire(),
     UserForgetPasswordController::class => \DI\autowire(),
 ];

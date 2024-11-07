@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Components\Mailer\Business\Model;
 
+use App\DataTransferObjects\MailDTO;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mailer\Transport\Transports;
@@ -10,19 +11,22 @@ use Symfony\Component\Mime\Email;
 
 class MailService
 {
-    public function send(string $email): void
+    private Mailer $mailer;
+
+    public function __construct()
     {
-        $mailer = new Mailer(new Transports(['main' => new EsmtpTransport('localhost', 1025)]));
-        $resetLink = 'http://localhost:8080/index.php?page=resetPassword&token=' . bin2hex($email);
+        $transport = new Transports(['main' => new EsmtpTransport('localhost', 1025)]);
+        $this->mailer = new Mailer($transport);
+    }
 
-        $mail = (new Email())
-            ->from('cash@cash.de')
-            ->to($email)
-            ->subject('Reset Password')
-            ->html('
-                    <a href="' . $resetLink . '">Click here to reset password</a>
-                    ');
+    public function send(MailDTO $mail): void
+    {
+        $email = (new Email())
+            ->from($mail->from)
+            ->to($mail->to)
+            ->subject($mail->subject)
+            ->html($mail->html);
 
-        $mailer->send($mail);
+        $this->mailer->send($email);
     }
 }

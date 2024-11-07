@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Integration\UserForgetPassword;
 
 use App\Components\Mailer\Business\MailerFacade;
+use App\Components\Mailer\Mapper\MailerMapper;
 use App\Components\Token\Business\TokenFacade;
 use App\Components\Token\Persistence\Mapper\TokenMapper;
 use App\Components\Token\Persistence\TokenEntityManager;
@@ -44,10 +45,12 @@ class UserForgetPasswordControllerTest extends TestCase
         $this->tokenRepository = new TokenRepository($sqlConnector, $tokenMapper);
         $tokenEntityManager = new TokenEntityManager($sqlConnector);
         $tokenFacade = new TokenFacade($this->tokenRepository, $tokenEntityManager, $tokenMapper);
+        $mailerMapper = new MailerMapper();
         $userForgetPasswordFacade = new UserForgetPasswordFacade(
             $userBusinessFacade,
             $mailerFacadeMock,
-            $tokenFacade
+            $tokenFacade,
+            $mailerMapper
         );
         $this->controller = new UserForgetPasswordController($this->view, $userForgetPasswordFacade);
 

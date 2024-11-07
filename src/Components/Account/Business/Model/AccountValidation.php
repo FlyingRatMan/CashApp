@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Components\Account;
+namespace App\Components\Account\Business\Model;
 
 use Error;
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Unit\Components\Account;
+namespace Unit\Components\Account\Model;
 
 use App\Components\Account\Persistence\Mapper\AccountMapper;
 use PHPUnit\Framework\TestCase;

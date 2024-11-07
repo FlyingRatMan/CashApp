@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+/*declare(strict_types=1);
 
 namespace App\Model\Account;
 
@@ -29,4 +29,4 @@ readonly class AccountRepository
 
         return $list;
     }
-}
+}*/

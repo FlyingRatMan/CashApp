@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+/*declare(strict_types=1);
 
 namespace App\Model\Account;
 
@@ -14,7 +14,7 @@ readonly class AccountEntityManager
     public function add(AccountDTO $accountDTO, $userID): void
     {
         $db = $this->sqlConnector::getConnection();
-        $query = "INSERT INTO Account (user_id, amount, date) 
+        $query = "INSERT INTO Account (user_id, amount, date)
             VALUES (:user_id, :amount, :date)";
 
         $params = [
@@ -25,4 +25,4 @@ readonly class AccountEntityManager
 
         $db->insert($query, $params);
     }
-}
+}*/

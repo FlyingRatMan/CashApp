@@ -1,9 +1,9 @@
 <?php
-declare(strict_types=1);
+/*declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Components\Account\AccountValidation;
+use App\Components\Account\Business\Model\AccountValidation;
 use App\Core\View;
 use App\Model\Account\AccountEntityManager;
 use App\Model\Account\AccountMapper;
@@ -75,4 +75,4 @@ readonly class HomeController
 
         return (int)$balance;
     }
-}
+}*/

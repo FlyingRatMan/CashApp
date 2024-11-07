@@ -28,11 +28,12 @@ class UserResetPasswordFacade
 
         if (!$isValidToken || !$isValidUser) {
             $this->view->setRedirect('/index.php?page=forgotPassword'); // should be probably error page
+            return;
         }
 
         $passwordErr = $this->userValidation->validatePassword($newPassword);
 
-        if ($passwordErr === null && $isValidUser) {
+        if ($passwordErr === null) {
             $userDTO = $this->userMapper->createUserDTO(
                 [
                     'id' => $isValidUser->id,
@@ -43,6 +44,7 @@ class UserResetPasswordFacade
             );
 
             $this->userFacade->updatePassword($userDTO, $newPassword);
+            $this->view->setRedirect('/index.php?page=login');
             return;
         }
 
