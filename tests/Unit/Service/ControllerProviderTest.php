@@ -6,9 +6,9 @@ namespace Unit\Service;
 use App\Components\Account\Communication\AccountController;
 use App\Components\UserForgetPassword\Communication\UserForgetPasswordController;
 use App\Components\UserLogin\Communication\UserLoginController;
+use App\Components\UserLogout\Communication\UserLogoutController;
 use App\Components\UserRegister\Communication\UserRegisterController;
 use App\Components\UserResetPassword\Communication\UserResetPasswordController;
-use App\Controller\LogoutController;
 use App\Service\ControllerProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -27,7 +27,7 @@ class ControllerProviderTest extends TestCase
             'home' => AccountController::class,
             'login' => UserLoginController::class,
             'register' => UserRegisterController::class,
-            'logout' => LogoutController::class,
+            'logout' => UserLogoutController::class,
             'resetPassword' => UserResetPasswordController::class,
             'forgotPassword' => UserForgetPasswordController::class,
         ];

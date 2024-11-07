@@ -6,9 +6,9 @@ namespace App\Service;
 use App\Components\Account\Communication\AccountController;
 use App\Components\UserForgetPassword\Communication\UserForgetPasswordController;
 use App\Components\UserLogin\Communication\UserLoginController;
+use App\Components\UserLogout\Communication\UserLogoutController;
 use App\Components\UserRegister\Communication\UserRegisterController;
 use App\Components\UserResetPassword\Communication\UserResetPasswordController;
-use App\Controller\LogoutController;
 
 class ControllerProvider
 {
@@ -18,7 +18,7 @@ class ControllerProvider
             'home' => AccountController::class,
             'login' => UserLoginController::class,
             'register' => UserRegisterController::class,
-            'logout' => LogoutController::class,
+            'logout' => UserLogoutController::class,
             'resetPassword' => UserResetPasswordController::class,
             'forgotPassword' => UserForgetPasswordController::class,
         ];

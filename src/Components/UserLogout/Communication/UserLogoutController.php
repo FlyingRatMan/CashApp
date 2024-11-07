@@ -1,11 +1,11 @@
 <?php
-/*declare(strict_types=1);
+declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Components\UserLogout\Communication;
 
 use App\Core\View;
 
-readonly class LogoutController
+class UserLogoutController
 {
     public function __construct(
         private View $view,
@@ -16,4 +16,4 @@ readonly class LogoutController
 
         $this->view->setRedirect('/index.php?page=login');
     }
-}*/
+}

@@ -14,10 +14,9 @@ use App\Components\User\Persistence\UserRepository;
 use App\Components\UserForgetPassword\Business\UserForgetPasswordFacade;
 use App\Components\UserForgetPassword\Communication\UserForgetPasswordController;
 use App\Components\UserLogin\Communication\UserLoginController;
+use App\Components\UserLogout\Communication\UserLogoutController;
 use App\Components\UserRegister\Communication\UserRegisterController;
 use App\Components\UserResetPassword\Communication\UserResetPasswordController;
-
-use App\Controller\LogoutController;
 use App\Core\View;
 use App\Model\DB\SqlConnector;
 use App\Service\ControllerProvider;
@@ -56,7 +55,7 @@ return [
     AccountController::class => \DI\autowire(),
     UserRegisterController::class => \DI\autowire(),
     UserLoginController::class => \DI\autowire(),
-    LogoutController::class => \DI\autowire(),
+    UserLogoutController::class => \DI\autowire(),
     UserResetPasswordController::class => \DI\autowire(),
     UserForgetPasswordController::class => \DI\autowire(),
 ];
