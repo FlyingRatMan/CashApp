@@ -24,7 +24,7 @@ class UserBusinessFacadeTest extends TestCase
 
         $sqlConnector = new ORMEntityManager();
         $this->userMapper = new UserMapper();
-        $this->userRepository = new UserRepository($this->userMapper, $sqlConnector);
+        $this->userRepository = new UserRepository($this->userMapper);
         $userEntityManager = new UserEntityManager($sqlConnector);
         $this->userBusinessFacade = new UserBusinessFacade($this->userRepository, $userEntityManager);
 
@@ -70,10 +70,11 @@ class UserBusinessFacadeTest extends TestCase
     public function testUpdatePasswordValid(): void
     {
         $user = $this->userMapper->createUserDTO(['id' => 1, 'name' => 'Max Mustermann', 'email' => 'max@example.com', 'password' => password_hash('12QWqw,.', PASSWORD_DEFAULT)]);
-        $newPassword = password_hash('new12QWqw,.', PASSWORD_DEFAULT);
+        $newPassword = 'new12QWqw,.';
 
-        $actualData = $this->userBusinessFacade->updatePassword($user, $newPassword);
+        $this->userBusinessFacade->updatePassword($user, $newPassword);
+        $actualData = $this->userRepository->getUserByEmail('max@example.com');
 
-        $this->assertTrue($actualData);
+        $this->assertTrue(password_verify('new12QWqw,.', $actualData->password));
     }
 }

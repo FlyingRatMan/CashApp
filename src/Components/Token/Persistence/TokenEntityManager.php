@@ -9,12 +9,12 @@ use App\Model\DB\ORMEntityManager;
 class TokenEntityManager
 {
     public function __construct(
-        private ORMEntityManager $entityManager
+        private ORMEntityManager $ORMEntityManager
     ) {}
 
     public function save(TokenDTO $tokenDTO): void // ?TokenEntity
     {
-        $entityManager = $this->entityManager::getEntityManager();
+        $entityManager = $this->ORMEntityManager::getEntityManager();
 
         $tokenEntity = new TokenEntity();
         $tokenEntity->setToken($tokenDTO->token);
@@ -27,7 +27,7 @@ class TokenEntityManager
 
     public function update(TokenDTO $tokenDTO): void
     {
-        $entityManager = $this->entityManager::getEntityManager();
+        $entityManager = $this->ORMEntityManager::getEntityManager();
 
         $tokenEntity = $entityManager->find(TokenEntity::class, $tokenDTO->id);
 

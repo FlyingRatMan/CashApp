@@ -19,13 +19,13 @@ class UserBusinessFacade
         return $this->userRepository->getUserByEmail($email);
     }
 
-    public function save(UserDTO $userDTO): bool
+    public function save(UserDTO $userDTO): void
     {
-        return $this->userEntityManager->save($userDTO);
+        $this->userEntityManager->save($userDTO);
     }
 
-    public function updatePassword(UserDTO $userDTO, string $newPassword): bool
+    public function updatePassword(UserDTO $userDTO, string $newPassword): void
     {
-        return $this->userEntityManager->updatePassword($userDTO, $newPassword);
+        $this->userEntityManager->updatePassword($userDTO, $newPassword);
     }
 }

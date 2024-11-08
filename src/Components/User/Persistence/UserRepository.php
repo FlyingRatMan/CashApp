@@ -10,19 +10,17 @@ use App\Model\DB\ORMEntityManager;
 class UserRepository
 {
     public function __construct(
-        private UserMapper       $userMapper,
-        private ORMEntityManager $sqlConnector,
+        private UserMapper $userMapper
     ) {}
 
     public function getUserByEmail(string $email): ?UserDTO
     {
-        $db = $this->sqlConnector::getConnection();
-        $query = 'SELECT * FROM Users WHERE email = :email LIMIT 1';
-        $data = $db->select($query, ['email' => $email]);
+        $repository = ORMEntityManager::getRepository(UserEntity::class);
 
-        if ($data) {
-            $user = $data[0];
-            return $this->userMapper->createUserDTO($user);
+        $userEntity = $repository->findOneBy(['email' => $email]);
+
+        if ($userEntity !== null) {
+            return $this->userMapper->entityToDTO($userEntity);
         }
 
         return null;

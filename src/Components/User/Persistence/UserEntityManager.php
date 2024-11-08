@@ -9,35 +9,34 @@ use App\Model\DB\ORMEntityManager;
 class UserEntityManager
 {
     public function __construct(
-        private ORMEntityManager $sqlConnector,
+        private ORMEntityManager $ORMEntityManager,
     ) {}
 
-    public function save(UserDTO $userDTO): bool
+    public function save(UserDTO $userDTO): void // ?UserEntity
     {
-        $db = $this->sqlConnector::getConnection();
-        $query = "INSERT INTO Users (name, email, password) VALUES (:name, :email, :password)";
+        $entityManager = $this->ORMEntityManager::getEntityManager();
 
-        $params = [
-            ':name' => $userDTO->name,
-            ':email' => $userDTO->email,
-            ':password' => $userDTO->password,
-        ];
+        $userEntity = new UserEntity();
+        $userEntity->setName($userDTO->name);
+        $userEntity->setEmail($userDTO->email);
+        $userEntity->setPassword($userDTO->password);
 
-        return $db->insert($query, $params);
+        $entityManager->persist($userEntity);
+        $entityManager->flush();
     }
 
-    public function updatePassword(UserDTO $userDTO, string $password): bool
+    public function updatePassword(UserDTO $userDTO, string $password): void
     {
-        $db = $this->sqlConnector::getConnection();
-        $query = "UPDATE Users SET name = :name, email = :email, password = :password WHERE id = :id";
+        $entityManager = $this->ORMEntityManager::getEntityManager();
 
-        $params = [
-            ':name' => $userDTO->name,
-            ':email' => $userDTO->email,
-            ':password' => password_hash($password, PASSWORD_DEFAULT),
-            ':id' => $userDTO->id,
-        ];
+        $userEntity = $entityManager->find(UserEntity::class, $userDTO->id);
 
-        return $db->update($query, $params);
+        if ($userEntity === null) return;
+
+        $userEntity->setName($userDTO->name);
+        $userEntity->setEmail($userDTO->email);
+        $userEntity->setPassword(password_hash($password, PASSWORD_DEFAULT));
+
+        $entityManager->flush();
     }
 }
