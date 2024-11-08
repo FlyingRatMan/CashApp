@@ -17,7 +17,7 @@ use App\Components\UserForgetPassword\Business\UserForgetPasswordFacade;
 use App\Components\UserForgetPassword\Communication\UserForgetPasswordController;
 use App\Core\View;
 use App\db_script;
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -35,7 +35,7 @@ class UserForgetPasswordControllerTest extends TestCase
         $twig = new Environment($loader);
 
         $this->view = new View($twig);
-        $sqlConnector = new SqlConnector();
+        $sqlConnector = new ORMEntityManager();
         $userMapper = new UserMapper();
         $userRepository = new UserRepository($userMapper, $sqlConnector);
         $userEntityManager = new UserEntityManager($sqlConnector);

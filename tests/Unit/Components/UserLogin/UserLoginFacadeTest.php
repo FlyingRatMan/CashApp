@@ -11,7 +11,7 @@ use App\Components\User\Persistence\UserRepository;
 use App\Components\UserLogin\Business\UserLoginFacade;
 use App\Core\View;
 use App\db_script;
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -31,7 +31,7 @@ class UserLoginFacadeTest extends TestCase
 
         $this->view = new View($twig);
         $userMapper = new UserMapper();
-        $sqlConnector = new SqlConnector();
+        $sqlConnector = new ORMEntityManager();
         $userRepository = new UserRepository($userMapper, $sqlConnector);
         $userEntityManager = new UserEntityManager($sqlConnector);
         $userFacade = new UserBusinessFacade($userRepository, $userEntityManager);

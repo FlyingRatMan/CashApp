@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace App\Components\Account\Persistence;
 
 use App\Components\Account\Persistence\Mapper\AccountMapper;
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 
 class AccountRepository
 {
     public function __construct(
-        private SqlConnector  $sqlConnector,
-        private AccountMapper $accountMapper
+        private ORMEntityManager $sqlConnector,
+        private AccountMapper    $accountMapper
     ) {}
 
     public function findAll(int $userID): array

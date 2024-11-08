@@ -18,7 +18,7 @@ use App\Components\UserLogout\Communication\UserLogoutController;
 use App\Components\UserRegister\Communication\UserRegisterController;
 use App\Components\UserResetPassword\Communication\UserResetPasswordController;
 use App\Core\View;
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 use App\Service\ControllerProvider;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -30,7 +30,7 @@ return [
     Environment::class => \DI\create(Environment::class)
         ->constructor(\DI\get(FilesystemLoader::class)),
 
-    SqlConnector::class => \DI\create(SqlConnector::class),
+    ORMEntityManager::class => \DI\create(ORMEntityManager::class),
 
     AccountEntityManager::class => \DI\autowire(),
     UserEntityManager::class => \DI\autowire(),

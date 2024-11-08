@@ -4,41 +4,39 @@ declare(strict_types=1);
 namespace App\Components\Token\Persistence;
 
 use App\DataTransferObjects\TokenDTO;
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 
 class TokenEntityManager
 {
     public function __construct(
-        private SqlConnector    $sqlConnector
+        private ORMEntityManager $entityManager
     ) {}
 
-    public function save(TokenDTO $tokenDTO): bool
+    public function save(TokenDTO $tokenDTO): void // ?TokenEntity
     {
-        $db = $this->sqlConnector::getConnection();
+        $entityManager = $this->entityManager::getEntityManager();
 
-        $insertQuery = "INSERT INTO Reset_password_tokens (token, email, expires_at) 
-                            VALUES (:token, :email, :expires_at)";
-        $params = [
-            'token' => $tokenDTO->token,
-            'email' => $tokenDTO->email,
-            'expires_at' => $tokenDTO->expires_at,
-        ];
+        $tokenEntity = new TokenEntity();
+        $tokenEntity->setToken($tokenDTO->token);
+        $tokenEntity->setEmail($tokenDTO->email);
+        $tokenEntity->setExpiresAt($tokenDTO->expires_at);
 
-        return $db->insert($insertQuery, $params);
+        $entityManager->persist($tokenEntity);
+        $entityManager->flush();
     }
 
-    public function update(TokenDTO $tokenDTO): bool
+    public function update(TokenDTO $tokenDTO): void
     {
-        $db = $this->sqlConnector::getConnection();
-        $query = "UPDATE Reset_password_tokens SET token = :token, email = :email, expires_at = :expires_at
-                             WHERE id = :id";
-        $params = [
-            'id' => $tokenDTO->id,
-            'token' => $tokenDTO->token,
-            'email' => $tokenDTO->email,
-            'expires_at' => $tokenDTO->expires_at,
-        ];
+        $entityManager = $this->entityManager::getEntityManager();
 
-        return $db->update($query, $params);
+        $tokenEntity = $entityManager->find(TokenEntity::class, $tokenDTO->id);
+
+        if ($tokenEntity === null) return;
+
+        $tokenEntity->setToken($tokenDTO->token);
+        $tokenEntity->setEmail($tokenDTO->email);
+        $tokenEntity->setExpiresAt($tokenDTO->expires_at);
+
+        $entityManager->flush();
     }
 }

@@ -5,25 +5,22 @@ namespace App\Components\Token\Persistence;
 
 use App\Components\Token\Persistence\Mapper\TokenMapper;
 use App\DataTransferObjects\TokenDTO;
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 
 class TokenRepository
 {
     public function __construct(
-        private SqlConnector $sqlConnector,
-        private TokenMapper  $tokenMapper
+        private TokenMapper $tokenMapper
     ) {}
 
     public function getTokenByEmail(string $email): ?TokenDTO
     {
-        $db = $this->sqlConnector::getConnection();
-        $query = 'SELECT * FROM Reset_password_tokens WHERE email = :email LIMIT 1';
+        $repository = ORMEntityManager::getRepository(TokenEntity::class);
 
-        $data = $db->select($query, ['email' => $email]);
+        $tokenEntity = $repository->findOneBy(['email' => $email]);
 
-        if (!empty($data)) {
-            $token = $data[0];
-            return $this->tokenMapper->createTokenDTO($token);
+        if ($tokenEntity !== null) {
+            return $this->tokenMapper->entityToDTO($tokenEntity);
         }
 
         return null;

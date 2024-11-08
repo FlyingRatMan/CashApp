@@ -8,7 +8,7 @@ use App\Components\Account\Persistence\AccountRepository;
 use App\Components\Account\Persistence\Mapper\AccountMapper;
 use App\DataTransferObjects\AccountDTO;
 use App\db_script;
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 
 class AccountEntityManagerTest extends TestCase
@@ -20,7 +20,7 @@ class AccountEntityManagerTest extends TestCase
     {
         parent::setUp();
 
-        $sqlConnector = new SqlConnector();
+        $sqlConnector = new ORMEntityManager();
         $this->accountEntityManager = new AccountEntityManager($sqlConnector);
         $this->accountRepository = new AccountRepository($sqlConnector, new AccountMapper());
     }

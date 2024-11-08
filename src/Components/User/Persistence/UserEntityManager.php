@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace App\Components\User\Persistence;
 
 use App\DataTransferObjects\UserDTO;
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 
 class UserEntityManager
 {
     public function __construct(
-        private SqlConnector $sqlConnector,
+        private ORMEntityManager $sqlConnector,
     ) {}
 
     public function save(UserDTO $userDTO): bool

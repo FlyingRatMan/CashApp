@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Unit\Components\Token;
 
 use App\Components\Token\Business\Model\TokenValidation;
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 
 class TokenValidationTest extends TestCase
@@ -13,7 +13,7 @@ class TokenValidationTest extends TestCase
 
     protected function setUp(): void
     {
-        $sqlConnector = new SqlConnector();
+        $sqlConnector = new ORMEntityManager();
         $this->validation = new TokenValidation($sqlConnector);
     }
 

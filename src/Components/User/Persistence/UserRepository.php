@@ -5,13 +5,13 @@ namespace App\Components\User\Persistence;
 
 use App\Components\User\Persistence\Mapper\UserMapper;
 use App\DataTransferObjects\UserDTO;
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 
 class UserRepository
 {
     public function __construct(
-        private UserMapper  $userMapper,
-        private SqlConnector $sqlConnector,
+        private UserMapper       $userMapper,
+        private ORMEntityManager $sqlConnector,
     ) {}
 
     public function getUserByEmail(string $email): ?UserDTO

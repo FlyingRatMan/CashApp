@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace App\Components\Token\Business\Model;
 
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 
 class TokenValidation
 {
     public function __construct(
-        private SqlConnector $sqlConnector
+        private ORMEntityManager $sqlConnector
     ) {}
     public function validateToken(string $email): bool {
         $db = $this->sqlConnector::getConnection();

@@ -6,7 +6,7 @@ namespace Unit\Components\Account;
 use App\Components\Account\Persistence\AccountRepository;
 use App\Components\Account\Persistence\Mapper\AccountMapper;
 use App\db_script;
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 
 class AccountRepositoryTest extends TestCase
@@ -17,7 +17,7 @@ class AccountRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->accountRepository = new AccountRepository(new SqlConnector(), new AccountMapper());
+        $this->accountRepository = new AccountRepository(new ORMEntityManager(), new AccountMapper());
     }
 
     protected function tearDown(): void

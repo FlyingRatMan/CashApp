@@ -14,7 +14,7 @@ use App\Components\User\Persistence\Mapper\UserMapper;
 use App\Components\User\Persistence\UserEntityManager;
 use App\Components\User\Persistence\UserRepository;
 use App\Components\UserForgetPassword\Business\UserForgetPasswordFacade;
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 
 class UserForgetPasswordFacadeTest extends TestCase
@@ -24,14 +24,14 @@ class UserForgetPasswordFacadeTest extends TestCase
 
     protected function setUp(): void
     {
-        $sqlConnector = new SqlConnector();
+        $sqlConnector = new ORMEntityManager();
         $userMapper = new UserMapper();
         $userRepository = new UserRepository($userMapper, $sqlConnector);
         $userEntityManager = new UserEntityManager($sqlConnector);
         $userBusinessFacade = new UserBusinessFacade($userRepository, $userEntityManager);
         $mailerFacadeMock = $this->createMock(MailerFacade::class);
         $tokenMapper = new TokenMapper();
-        $this->tokenRepository = new TokenRepository($sqlConnector, $tokenMapper);
+        $this->tokenRepository = new TokenRepository($tokenMapper);
         $tokenEntityManager = new TokenEntityManager($sqlConnector);
         $tokenFacade = new TokenFacade($this->tokenRepository, $tokenEntityManager, $tokenMapper);
         $mailerMapper = new MailerMapper();

@@ -16,14 +16,14 @@ class TokenFacade
         private TokenMapper        $tokenMapper
     ) {}
 
-    public function saveToken(TokenDTO $tokenDTO): bool
+    public function saveToken(TokenDTO $tokenDTO): void
     {
-        return $this->tokenEntityManager->save($tokenDTO);
+        $this->tokenEntityManager->save($tokenDTO);
     }
 
-    public function updateToken(TokenDTO $tokenDTO): bool
+    public function updateToken(TokenDTO $tokenDTO): void
     {
-        return $this->tokenEntityManager->update($tokenDTO);
+        $this->tokenEntityManager->update($tokenDTO);
     }
 
     public function getTokenByEmail(string $email): ?TokenDTO

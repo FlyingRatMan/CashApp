@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace App\Components\Account\Persistence;
 
 use App\DataTransferObjects\AccountDTO;
-use App\Model\DB\SqlConnector;
+use App\Model\DB\ORMEntityManager;
 
 class AccountEntityManager
 {
     public function __construct(
-        private SqlConnector $sqlConnector,
+        private ORMEntityManager $sqlConnector,
     ) {}
 
     public function add(AccountDTO $accountDTO, $userID): void
