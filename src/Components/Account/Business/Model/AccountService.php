@@ -8,7 +8,7 @@ use App\Components\Account\Persistence\AccountRepository;
 class AccountService
 {
     public function __construct(
-        private AccountRepository    $accountRepository,
+        private AccountRepository $accountRepository,
     ) {}
 
     public function getBalance(int $userID): int

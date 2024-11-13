@@ -11,7 +11,7 @@ use App\Components\User\Persistence\UserEntityManager;
 use App\Components\User\Persistence\UserRepository;
 use App\Components\UserResetPassword\Business\UserResetPasswordFacade;
 use App\Core\View;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -27,12 +27,11 @@ class UserResetPasswordFacadeTest extends TestCase
         $twig = new Environment($loader);
 
         $this->view = new View($twig);
-        $sqlConnector = new ORMEntityManager();
         $userMapper = new UserMapper();
-        $userRepository = new UserRepository($userMapper, $sqlConnector);
-        $userManager = new UserEntityManager($sqlConnector);
+        $userRepository = new UserRepository($userMapper);
+        $userManager = new UserEntityManager(new ORMEntityManager());
         $userFacade = new UserBusinessFacade($userRepository, $userManager);
-        $tokenValidation = new TokenValidation($sqlConnector);
+        $tokenValidation = new TokenValidation();
         $userValidation = new UserValidation($userFacade);
         $this->facade = new UserResetPasswordFacade($this->view, $userFacade, $tokenValidation, $userValidation, $userMapper);
     }

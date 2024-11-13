@@ -1,12 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Components\User\Persistence;
+namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Table;
 
 #[Entity]
@@ -25,6 +28,15 @@ class UserEntity
 
     #[Column(type: 'string', length: 255)]
     private string $password;
+
+    #[OneToMany(mappedBy: 'userId', targetEntity: AccountEntity::class, cascade: ['persist', 'remove'])]
+    private Collection $transactions;
+
+    // getters setters
+    public function __construct()
+    {
+        $this->transactions = new ArrayCollection();
+    }
 
     public function getId(): int
     {
@@ -61,6 +73,18 @@ class UserEntity
     public function setEmail(string $email): UserEntity
     {
         $this->email = $email;
+        return $this;
+    }
+
+    public function getTransactions(): Collection
+    {
+        return $this->transactions;
+    }
+
+    public function addTransaction(AccountEntity $transaction): self
+    {
+        $this->transactions->add($transaction);
+
         return $this;
     }
 }

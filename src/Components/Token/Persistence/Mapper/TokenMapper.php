@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Components\Token\Persistence\Mapper;
 
-use App\Components\Token\Persistence\TokenEntity;
 use App\DataTransferObjects\TokenDTO;
+use App\Entity\TokenEntity;
 
 class TokenMapper
 {

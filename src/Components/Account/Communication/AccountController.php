@@ -5,7 +5,6 @@ namespace App\Components\Account\Communication;
 
 use App\Components\Account\Business\AccountBusinessFacade;
 use App\Components\Account\Business\Model\AccountService;
-use App\Components\Account\Persistence\AccountEntityManager;
 use App\Components\Account\Persistence\Mapper\AccountMapper;
 use App\Core\View;
 

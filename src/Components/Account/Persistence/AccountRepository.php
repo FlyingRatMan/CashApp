@@ -4,36 +4,37 @@ declare(strict_types=1);
 namespace App\Components\Account\Persistence;
 
 use App\Components\Account\Persistence\Mapper\AccountMapper;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
+use App\Entity\AccountEntity;
 
 class AccountRepository
 {
     public function __construct(
-        private ORMEntityManager $sqlConnector,
-        private AccountMapper    $accountMapper
+        private AccountMapper $accountMapper
     ) {}
 
     public function findAll(int $userID): array
     {
-        $db = $this->sqlConnector::getConnection();
-        $query = 'SELECT * FROM Account WHERE user_id = :userID';
-        $transactions = $db->select($query, ['userID' => $userID]);
+        $repository = ORMEntityManager::getRepository(AccountEntity::class);
+
+        $transactions = $repository->findBy(['userId' => $userID]);
 
         if (empty($transactions)) {
             return [];
         }
 
-        $list = [];
+        $listOfTransactions = [];
         foreach ($transactions as $transaction) {
             $accountDTO = $this->accountMapper->createAccountDTO(
                 [
-                    'id' => $transaction['id'],
-                    'user_id' => $transaction['user_id'],
-                    'amount' => $transaction['amount'],
-                    'date' => $transaction['date']]);
-            $list[] = $accountDTO;
+                    'id' => $transaction->getId(),
+                    'user_id' => $transaction->getUserId(),
+                    'amount' => $transaction->getAmount(),
+                    'date' => $transaction->getDate(),
+                ]);
+            $listOfTransactions[] = $accountDTO;
         }
 
-        return $list;
+        return $listOfTransactions;
     }
 }

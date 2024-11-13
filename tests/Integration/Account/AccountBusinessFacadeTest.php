@@ -10,7 +10,7 @@ use App\Components\Account\Persistence\AccountRepository;
 use App\Components\Account\Persistence\Mapper\AccountMapper;
 use App\Core\View;
 use App\DataTransferObjects\AccountDTO;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -33,7 +33,7 @@ class AccountBusinessFacadeTest extends TestCase
         $accountEntityManager = new AccountEntityManager($sqlConnector);
         $accountValidation = new AccountValidation();
         $accountMapper = new AccountMapper();
-        $this->accountRepository = new AccountRepository($sqlConnector, $accountMapper);
+        $this->accountRepository = new AccountRepository($accountMapper);
         $this->accountBusinessFacade = new AccountBusinessFacade(
             $this->view,
             $accountEntityManager,

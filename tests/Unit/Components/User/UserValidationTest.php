@@ -9,7 +9,7 @@ use App\Components\User\Persistence\Mapper\UserMapper;
 use App\Components\User\Persistence\UserEntityManager;
 use App\Components\User\Persistence\UserRepository;
 use App\db_script;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 
 class UserValidationTest extends TestCase
@@ -21,10 +21,8 @@ class UserValidationTest extends TestCase
     {
         parent::setUp();
 
-        $userMapper = new UserMapper();
-        $sqlConnector = new ORMEntityManager();
-        $userRepository = new UserRepository($userMapper, $sqlConnector);
-        $userEntityManager = new UserEntityManager($sqlConnector);
+        $userRepository = new UserRepository(new UserMapper());
+        $userEntityManager = new UserEntityManager(new ORMEntityManager());
         $userBusinessFacade = new UserBusinessFacade($userRepository, $userEntityManager);
         $this->validator = new UserValidation($userBusinessFacade);
 

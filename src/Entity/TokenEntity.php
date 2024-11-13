@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Components\Token\Persistence;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -26,6 +26,7 @@ class TokenEntity
     #[Column(name: 'expires_at', type: 'string', length: 50)]
     private string $expiresAt;
 
+    // getters setters
     public function getId(): int
     {
         return $this->id;

@@ -11,7 +11,7 @@ use App\Components\Account\Persistence\AccountEntityManager;
 use App\Components\Account\Persistence\AccountRepository;
 use App\Components\Account\Persistence\Mapper\AccountMapper;
 use App\Core\View;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -33,7 +33,7 @@ class AccountControllerTest extends TestCase
         $accountEntityManager = new AccountEntityManager($sqlConnector);
         $accountValidation = new AccountValidation();
         $accountMapper = new AccountMapper();
-        $accountRepository = new AccountRepository($sqlConnector, $accountMapper);
+        $accountRepository = new AccountRepository($accountMapper);
         $accountService = new AccountService($accountRepository);
         $accountBusinessFacade = new AccountBusinessFacade(
             $this->view,

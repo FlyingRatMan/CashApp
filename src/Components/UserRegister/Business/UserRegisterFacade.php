@@ -8,7 +8,6 @@ use App\Components\User\Persistence\Mapper\UserMapper;
 use App\Components\User\Persistence\UserEntityManager;
 use App\Core\View;
 use App\DataTransferObjects\UserDTO;
-use Error;
 
 class UserRegisterFacade
 {

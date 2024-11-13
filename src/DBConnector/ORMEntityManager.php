@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model\DB;
+namespace App\DBConnector;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
@@ -19,7 +19,7 @@ class ORMEntityManager
             $database = $_ENV['DATABASE'] ?? 'cash';
 
             $config = ORMSetup::createAttributeMetadataConfiguration(
-                paths: array(__DIR__ . "/src"),
+                paths: [__DIR__ . '/../Entity'],
                 isDevMode: true,
             );
 

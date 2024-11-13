@@ -13,7 +13,7 @@ use App\Components\UserRegister\Communication\UserRegisterController;
 use App\Core\View;
 use App\DataTransferObjects\UserDTO;
 use App\db_script;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -34,7 +34,7 @@ class UserRegisterControllerTest extends TestCase
         $view = new View($twig);
         $userMapper = new UserMapper();
         $sqlConnector = new ORMEntityManager();
-        $this->userRepository = new UserRepository($userMapper, $sqlConnector);
+        $this->userRepository = new UserRepository($userMapper);
         $userEntityManager = new UserEntityManager($sqlConnector);
         $userFacade = new UserBusinessFacade($this->userRepository, $userEntityManager);
         $userValidation = new UserValidation($userFacade);

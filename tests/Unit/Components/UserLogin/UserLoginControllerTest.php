@@ -11,7 +11,7 @@ use App\Components\User\Persistence\UserRepository;
 use App\Components\UserLogin\Business\UserLoginFacade;
 use App\Components\UserLogin\Communication\UserLoginController;
 use App\Core\View;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -31,10 +31,8 @@ class UserLoginControllerTest extends TestCase
         $twig = new Environment($loader);
 
         $this->view = new View($twig);
-        $sqlConnector = new ORMEntityManager();
-        $userMapper = new UserMapper();
-        $userRepository = new UserRepository($userMapper, $sqlConnector);
-        $userEntityManager = new UserEntityManager($sqlConnector);
+        $userRepository = new UserRepository(new UserMapper());
+        $userEntityManager = new UserEntityManager(new ORMEntityManager());
         $userFacade = new UserBusinessFacade($userRepository, $userEntityManager);
         $userValidation = new UserValidation($userFacade);
         $loginFacade = new UserLoginFacade($this->view, $userValidation);

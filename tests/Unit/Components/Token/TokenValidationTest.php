@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Unit\Components\Token;
 
 use App\Components\Token\Business\Model\TokenValidation;
-use App\Model\DB\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 
 class TokenValidationTest extends TestCase
@@ -13,11 +12,11 @@ class TokenValidationTest extends TestCase
 
     protected function setUp(): void
     {
-        $sqlConnector = new ORMEntityManager();
-        $this->validation = new TokenValidation($sqlConnector);
+        $this->validation = new TokenValidation();
     }
 
-    public function testValidToken(): void {
+    public function testValidToken(): void
+    {
         $email = 'update@example.com';
 
         $actual = $this->validation->ValidateToken($email);
@@ -25,7 +24,8 @@ class TokenValidationTest extends TestCase
         $this->assertTrue($actual);
     }
 
-    public function testInvalidToken(): void {
+    public function testInvalidToken(): void
+    {
         $email = 'max@example.com';
 
         $actual = $this->validation->ValidateToken($email);
@@ -33,7 +33,8 @@ class TokenValidationTest extends TestCase
         $this->assertFalse($actual);
     }
 
-    public function testInvalidEmail(): void {
+    public function testInvalidEmail(): void
+    {
         $email = 'invalid@example.com';
 
         $actual = $this->validation->ValidateToken($email);

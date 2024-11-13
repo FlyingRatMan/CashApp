@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace App\Components\Token\Persistence;
 
 use App\DataTransferObjects\TokenDTO;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
+use App\Entity\TokenEntity;
 
 class TokenEntityManager
 {

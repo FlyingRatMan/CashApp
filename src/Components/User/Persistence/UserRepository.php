@@ -5,7 +5,8 @@ namespace App\Components\User\Persistence;
 
 use App\Components\User\Persistence\Mapper\UserMapper;
 use App\DataTransferObjects\UserDTO;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
+use App\Entity\UserEntity;
 
 class UserRepository
 {

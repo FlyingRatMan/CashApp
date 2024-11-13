@@ -18,7 +18,7 @@ use App\Components\UserLogout\Communication\UserLogoutController;
 use App\Components\UserRegister\Communication\UserRegisterController;
 use App\Components\UserResetPassword\Communication\UserResetPasswordController;
 use App\Core\View;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
 use App\Service\ControllerProvider;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;

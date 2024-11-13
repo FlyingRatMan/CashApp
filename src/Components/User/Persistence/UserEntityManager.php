@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace App\Components\User\Persistence;
 
 use App\DataTransferObjects\UserDTO;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
+use App\Entity\UserEntity;
 
 class UserEntityManager
 {

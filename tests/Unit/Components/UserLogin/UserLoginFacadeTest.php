@@ -11,7 +11,7 @@ use App\Components\User\Persistence\UserRepository;
 use App\Components\UserLogin\Business\UserLoginFacade;
 use App\Core\View;
 use App\db_script;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -20,7 +20,6 @@ class UserLoginFacadeTest extends TestCase
 {
     private UserLoginFacade $userLoginFacade;
     private View $view;
-    private db_script $db_script;
 
     protected function setUp(): void
     {
@@ -30,16 +29,14 @@ class UserLoginFacadeTest extends TestCase
         $twig = new Environment($loader);
 
         $this->view = new View($twig);
-        $userMapper = new UserMapper();
-        $sqlConnector = new ORMEntityManager();
-        $userRepository = new UserRepository($userMapper, $sqlConnector);
-        $userEntityManager = new UserEntityManager($sqlConnector);
+        $userRepository = new UserRepository(new UserMapper());
+        $userEntityManager = new UserEntityManager(new ORMEntityManager());
         $userFacade = new UserBusinessFacade($userRepository, $userEntityManager);
         $userValidation = new UserValidation($userFacade);
         $this->userLoginFacade = new UserLoginFacade($this->view, $userValidation);
 
-        $this->db_script = new db_script();
-        $this->db_script->prefillDatabase();
+        $db_script = new db_script();
+        $db_script->prefillDatabase();
     }
 
     public function testLoginInvalid(): void

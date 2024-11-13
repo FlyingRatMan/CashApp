@@ -11,7 +11,7 @@ use App\Components\User\Persistence\UserRepository;
 use App\Components\UserRegister\Business\UserRegisterFacade;
 use App\Components\UserRegister\Communication\UserRegisterController;
 use App\Core\View;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -30,9 +30,8 @@ class UserRegisterControllerTest extends TestCase
 
         $this->view = new View($twig);
         $userMapper = new UserMapper();
-        $sqlConnector = new ORMEntityManager();
-        $userRepository = new UserRepository($userMapper, $sqlConnector);
-        $userEntityManager = new UserEntityManager($sqlConnector);
+        $userRepository = new UserRepository($userMapper);
+        $userEntityManager = new UserEntityManager(new ORMEntityManager());
         $userFacade = new UserBusinessFacade($userRepository, $userEntityManager);
         $userValidation = new UserValidation($userFacade);
         $userRegisterFacade = new UserRegisterFacade($this->view, $userValidation, $userMapper, $userEntityManager);

@@ -12,7 +12,7 @@ use App\Components\UserLogin\Business\UserLoginFacade;
 use App\Components\UserLogin\Communication\UserLoginController;
 use App\Core\View;
 use App\db_script;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -33,7 +33,7 @@ class UserLoginControllerTest extends TestCase
         $view = new View($twig);
         $sqlConnector = new ORMEntityManager();
         $userMapper = new UserMapper();
-        $userRepository = new UserRepository($userMapper, $sqlConnector);
+        $userRepository = new UserRepository($userMapper);
         $userEntityManager = new UserEntityManager($sqlConnector);
         $userFacade = new UserBusinessFacade($userRepository, $userEntityManager);
         $userValidation = new UserValidation($userFacade);

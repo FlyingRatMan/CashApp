@@ -5,7 +5,8 @@ namespace App\Components\Token\Persistence;
 
 use App\Components\Token\Persistence\Mapper\TokenMapper;
 use App\DataTransferObjects\TokenDTO;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
+use App\Entity\TokenEntity;
 
 class TokenRepository
 {

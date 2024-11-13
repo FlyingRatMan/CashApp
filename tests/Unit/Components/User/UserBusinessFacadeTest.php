@@ -8,7 +8,7 @@ use App\Components\User\Persistence\Mapper\UserMapper;
 use App\Components\User\Persistence\UserEntityManager;
 use App\Components\User\Persistence\UserRepository;
 use App\db_script;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
 use PHPUnit\Framework\TestCase;
 
 class UserBusinessFacadeTest extends TestCase
@@ -22,10 +22,9 @@ class UserBusinessFacadeTest extends TestCase
     {
         parent::setUp();
 
-        $sqlConnector = new ORMEntityManager();
         $this->userMapper = new UserMapper();
         $this->userRepository = new UserRepository($this->userMapper);
-        $userEntityManager = new UserEntityManager($sqlConnector);
+        $userEntityManager = new UserEntityManager(new ORMEntityManager());
         $this->userBusinessFacade = new UserBusinessFacade($this->userRepository, $userEntityManager);
 
         $this->db_script = new db_script();

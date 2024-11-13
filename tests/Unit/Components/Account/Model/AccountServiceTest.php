@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class AccountServiceTest extends TestCase
 {
-    private AccountService  $accountService;
+    private AccountService $accountService;
     private AccountRepository $accountRepository;
 
     protected function setUp(): void

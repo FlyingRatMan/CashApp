@@ -4,26 +4,25 @@ declare(strict_types=1);
 namespace App\Components\Account\Persistence;
 
 use App\DataTransferObjects\AccountDTO;
-use App\Model\DB\ORMEntityManager;
+use App\DBConnector\ORMEntityManager;
+use App\Entity\AccountEntity;
 
 class AccountEntityManager
 {
     public function __construct(
-        private ORMEntityManager $sqlConnector,
+        private ORMEntityManager $ORMEntityManager,
     ) {}
 
     public function add(AccountDTO $accountDTO, $userID): void
     {
-        $db = $this->sqlConnector::getConnection();
-        $query = "INSERT INTO Account (user_id, amount, date) 
-            VALUES (:user_id, :amount, :date)";
+        $entityManager = $this->ORMEntityManager::getEntityManager();
 
-        $params = [
-            'user_id' => $userID,
-            'amount' => $accountDTO->amount,
-            'date' => $accountDTO->date,
-        ];
+        $accountEntity = new AccountEntity();
+        $accountEntity->setUserID($userID);
+        $accountEntity->setAmount($accountDTO->amount);
+        $accountEntity->setDate($accountDTO->date);
 
-        $db->insert($query, $params);
+        $entityManager->persist($accountEntity);
+        $entityManager->flush();
     }
 }
